@@ -28,7 +28,7 @@ public class Horse_Move : MonoBehaviour
 
         cnt++;
 
-        float die = Random.Range(1, 10000);
+        float die = Random.Range(1, 1000000);
         
         
         if(LiveOrDie == 0) 
