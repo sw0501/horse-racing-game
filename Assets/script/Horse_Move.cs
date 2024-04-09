@@ -43,7 +43,7 @@ public class Horse_Move : MonoBehaviour
         //가중치 추가
         // y와 z 축을 고정하고 x 축만 랜덤하게 변경
 
-        float TempSpeed = Random.Range(0.05f, 0.2f);
+        float TempSpeed = Random.Range(0.02f, 0.2f);
         HorseSpeed = TempSpeed;
 
         if (LiveOrDie == 1)
