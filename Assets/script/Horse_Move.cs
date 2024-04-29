@@ -10,11 +10,13 @@ public class Horse_Move : MonoBehaviour
     public float HorseSpeed;
     public AnimatorControllerParameter walk;
     int LiveOrDie;
+    public bool flag;
 
     // Start is called before the first frame update
     void Start()
     {
         LiveOrDie = 0;
+        flag = false;
     }
 
     // Update is called once per frame
@@ -28,10 +30,11 @@ public class Horse_Move : MonoBehaviour
 
         cnt++;
 
-        float die = Random.Range(1, 1000000);
-        
-        
-        if(LiveOrDie == 0) 
+        float die = Random.Range(1, 50000);
+        /*float die = Random.Range(1, 100);*/
+
+
+        if (flag && LiveOrDie == 0) 
         {
             if (die == 44)
             {
@@ -44,6 +47,7 @@ public class Horse_Move : MonoBehaviour
         // y와 z 축을 고정하고 x 축만 랜덤하게 변경
 
         float TempSpeed = Random.Range(0.02f, 0.2f);
+        /*float TempSpeed = Random.Range(0.5f, 1.0f);*/
         HorseSpeed = TempSpeed;
 
         if (LiveOrDie == 1)
