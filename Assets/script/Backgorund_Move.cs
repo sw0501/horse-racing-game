@@ -1,23 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Backgorund_Move : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Transform cameraTransform;
+
+    [Range(0f, 1f)]
+    public float parallaxFactor = 0.5f;
+
+    Vector3 lastCameraPosition;
+
     void Start()
     {
-        
+        if (cameraTransform == null)
+        {
+            cameraTransform = Camera.main.transform;
+        }
+
+        lastCameraPosition = cameraTransform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-
-    }
-
-    private void FixedUpdate()
-    {
-        
+        Vector3 delta = cameraTransform.position - lastCameraPosition;
+        transform.position += new Vector3(delta.x * parallaxFactor, 0f, 0f);
+        lastCameraPosition = cameraTransform.position;
     }
 }

@@ -72,3 +72,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 .vsconfig
+
+# Claude Code project instructions
+CLAUDE.md

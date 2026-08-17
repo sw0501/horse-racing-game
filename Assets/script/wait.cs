@@ -12,11 +12,24 @@ public class wait : MonoBehaviour
     public GameObject h5;
     public GameObject poppy;
 
-    // Start is called before the first frame update
+    public float startDelaySeconds = 4.5f;
 
-    IEnumerator Wait()
-    { 
-        yield return new WaitForSeconds(4.5f);
+    // GameFlowController(또는 StartLightController)가 준비 완료 시점에 호출
+    public void BeginWait()
+    {
+        BeginWait(startDelaySeconds);
+    }
+
+    public void BeginWait(float delaySeconds)
+    {
+        StartCoroutine(Wait(delaySeconds));
+    }
+
+    IEnumerator Wait(float delaySeconds)
+    {
+        yield return new WaitForSeconds(delaySeconds);
+
+        RaceConfig.RaceStartTime = Time.time;
 
         h1.GetComponent<Animator>().enabled = true;
         h1.GetComponent<Horse_Move>().enabled = true;
@@ -33,14 +46,4 @@ public class wait : MonoBehaviour
 
     }
 
-    void Start()
-    {
-        StartCoroutine(Wait());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
