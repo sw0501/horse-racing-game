@@ -37,6 +37,9 @@ public class GameFlowController : MonoBehaviour
         if (startMenu != null) startMenu.SetActive(true);
         if (chooseAnimalMenu != null) chooseAnimalMenu.SetActive(false);
         if (endMenu != null) endMenu.SetActive(false);
+
+        // 신호등은 BeginRace() 직전까지는 화면에 보이면 안 됨(패널 배경이 항상 켜져 있으면 다른 화면과 겹침)
+        if (startLight != null) startLight.gameObject.SetActive(false);
     }
 
     // NextButton의 OnClick에 추가로 연결 (기존 StartMenu.SetActive(false) 호출은 유지)

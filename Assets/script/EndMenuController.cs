@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class EndMenuController : MonoBehaviour
 {
     public GameObject endMenu;
+    public GameObject endMenuUIRoot; // 스케일 1인 UI 컨테이너(텍스트/버튼). endMenu와 분리된 오브젝트일 수 있음
     public TMP_Text recordSummaryText; // 선택 사항 — 비워두면 표시 생략
     public TMP_Text betResultText; // 선택 사항 — 비워두면 표시 생략
 
@@ -13,6 +14,11 @@ public class EndMenuController : MonoBehaviour
         if (endMenu != null)
         {
             endMenu.SetActive(true);
+        }
+
+        if (endMenuUIRoot != null)
+        {
+            endMenuUIRoot.SetActive(true);
         }
 
         if (RaceConfig.SaveLocalRecords && recordSummaryText != null)
