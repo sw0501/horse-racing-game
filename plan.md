@@ -8,8 +8,9 @@
 5. (2026-08-17) 컴파일을 막던 미사용 `TextMesh Pro/Examples & Extras` 폴더 제거(이후 TMP 리소스 재확인 과정에서 두 번 더 재생성되어 그때마다 삭제 + `.gitignore`에 추가)
 6. (2026-08-17) **Unity MCP로 필수 배선(이슈 #1~#3) 완료 + Play 모드 전체 플로우 검증(이슈 #12)**. 검증 중 `TMP_Dropdown` 관련 실버그 발견·수정.
 7. (2026-08-17) **Unity MCP로 선택 기능 이슈 #4~#11 전부 씬 배선 완료** (신호등/동물선택화면/AnimalVisual/실시간HUD/포토피니시/부스트존/온오프토글). #7(배경 패럴랙스)만 안전한 부착 대상이 없어 보류.
+8. (2026-08-17) `osascript`로 Unity 에디터 프로세스에 OS 포커스를 강제로 준 뒤 신호등 재검증 — macOS App Nap으로 막혀있던 코루틴 실시간 완주까지 확인. 같은 세션에서 실시간 순위 HUD·결과 화면·로컬 기록 저장도 실시간으로 끝까지 정상 동작 재확인.
 
-**현재 상태 요약**: 등록된 이슈 17개 중 **#1~#6, #8~#12(11개) 완료**, **#7만 보류**(안전한 배경 레이어 없음), **#13~#17(신규 기능/정리)은 미착수**. 씬을 Play 하면 시작 화면 → 마릿수/동물/옵션 선택 → 신호등 → 경주(부스트존·포토피니시 포함) → 결과 화면(실시간 HUD 포함) → 재시작까지 전체 기능이 배선된 상태. ([이슈 목록](https://github.com/sw0501/horse-racing-game/issues))
+**현재 상태 요약**: 등록된 이슈 17개 중 **#1~#6, #8~#12(11개) 완료 + 실시간 검증까지 끝남**, **#7만 보류**(안전한 배경 레이어 없음), **#13~#17(신규 기능/정리)은 미착수**. 씬을 Play 하면 시작 화면 → 마릿수/동물/옵션 선택 → 신호등 → 경주(부스트존·포토피니시 포함) → 결과 화면(실시간 HUD 포함) → 재시작까지 전체 기능이 실제로 동작함. ([이슈 목록](https://github.com/sw0501/horse-racing-game/issues))
 
 ### 등록된 이슈
 
@@ -19,7 +20,7 @@
 - [x] [#3 NextButton에 OnHorseCountConfirmed 연결](https://github.com/sw0501/horse-racing-game/issues/3) — closed
 
 **기능별 에디터 배치** — #7 제외 전부 완료
-- [x] [#4 출발 신호등 UI 제작](https://github.com/sw0501/horse-racing-game/issues/4) — closed. 3색 UI Image 생성·연결, 첫 점등까지 Play 확인. 코루틴 타이머 실완주는 에디터 언포커스(macOS App Nap)로 이 세션에서 재현 못함.
+- [x] [#4 출발 신호등 UI 제작](https://github.com/sw0501/horse-racing-game/issues/4) — closed. 3색 UI Image 생성·연결. `osascript`로 Unity에 OS 포커스를 준 뒤 재검증해 신호등 실시간 완주(1초×3) → 경주 자동 시작까지 확인 완료.
 - [x] [#5 ChooseName 동물 선택 화면 구성](https://github.com/sw0501/horse-racing-game/issues/5) — closed. 버튼 5개(Fox/Rabbit 제외) 생성·연결, Play 모드에서 Boar 선택 시 Animator·스탯 반영까지 확인.
 - [x] [#6 말 오브젝트에 AnimalVisual 부착 및 Controller 연결](https://github.com/sw0501/horse-racing-game/issues/6) — closed.
 - [ ] [#7 배경 패럴랙스 레이어 배치](https://github.com/sw0501/horse-racing-game/issues/7) — **보류**. `Map`이 배경 스프라이트가 아니라 트랙 데코 전체(자식 ~350개)를 담은 컨테이너라 패럴랙스를 붙이면 시각적으로 깨짐. 전용 원경 레이어 아트가 있어야 진행 가능.
@@ -87,7 +88,7 @@ README에 명시된 3가지 핵심 기능:
 
 ### 4. 출발 직전 신호등 UI
 - [x] 스크립트 구현 — `StartLightController.cs`(순차 점등 후 `wait.BeginWait(0f)` 호출, 자체 지연이 `wait.cs`의 기본 4.5초를 대체).
-- [x] 에디터 연결 — 완료(이슈 #4). 빨강/노랑/초록 UI Image 3개(별도 스프라이트 없이 색상만 사용) 생성 및 연결. Play 모드에서 점등 시작까지 확인(코루틴 실완주는 에디터 언포커스 이슈로 이 세션에서 끝까지 재현은 못함).
+- [x] 에디터 연결 — 완료(이슈 #4). 빨강/노랑/초록 UI Image 3개(별도 스프라이트 없이 색상만 사용) 생성 및 연결. Unity에 OS 포커스를 준 뒤 실시간 완주(경주 자동 시작)까지 확인.
 
 ### 5. 동물 움직임 y축 추가
 - [x] 스크립트 구현 완료 — `Horse_Move.cs`: 시작 y좌표(`startY`) 기준 `verticalWobbleRange`(기본 0.3) 내에서 매 프레임 `verticalWobbleSpeed`(기본 0.05)만큼 랜덤 누적·클램프. x축 전진 로직은 유지. **에디터 작업 불필요, 바로 동작.**
@@ -108,7 +109,7 @@ README에 명시된 3가지 핵심 기능:
 
 - [x] **2. EndMenu 구성** — 완료(이슈 #2). `EndMenuController` 부착, `ReturnToStartButton`("처음으로" 버튼) + `RecordSummaryText` 생성 및 연결, `HorseOff.gameFlow` 연결까지 끝남. 최종 순위는 `Ranking`이 `EndMenu`보다 Canvas 자식 순서상 위라 별도 텍스트 복제 없이 그대로 보임.
 
-- [x] **3. 신호등 UI** — 완료(이슈 #4). `StartLightPanel` 아래 빨강/노랑/초록 UI Image 3개(색상만 사용, 별도 스프라이트 불필요) 생성, `StartLightController.lights`/`waitScript`, `GameFlowController.startLight` 연결. Play 모드에서 점등 시작 확인.
+- [x] **3. 신호등 UI** — 완료(이슈 #4). `StartLightPanel` 아래 빨강/노랑/초록 UI Image 3개(색상만 사용, 별도 스프라이트 불필요) 생성, `StartLightController.lights`/`waitScript`, `GameFlowController.startLight` 연결. Unity에 OS 포커스를 준 뒤 실시간 점등→경주 자동 시작까지 확인.
 
 - [x] **4. NextButton 추가 연결** — 완료(이슈 #3). `execute_code`로 `UnityEventTools.AddPersistentListener` 사용해 기존 호출(`StartMenu.SetActive(false)`, `ChooseName.SetActive`) 유지한 채 `GameFlowController.OnHorseCountConfirmed` 추가.
 
