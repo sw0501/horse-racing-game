@@ -1,14 +1,15 @@
 # 경마 게임 — 진행 상황
 
-마지막 커밋: `210dc35` "Fix: TMP_Dropdown 버그 수정 및 Unity MCP로 씬 배선(이슈 #1~#3) 완료" (2026-08-17). 진행 이력:
+마지막 커밋: `216b9c5` "Feat: Unity MCP로 선택 기능 이슈(#4~#11) 씬 배선 완료" (2026-08-17). 진행 이력:
 1. (2026-08-15~17) 신규 기능 7종(시작 화면, 참가 인원 조절, 동물 선택, 신호등, y축 이동, 결과 화면, 재시작) 스크립트 레이어 구현
 2. (2026-08-17) 코드/에셋 개선사항 4종 반영(중복 에셋 정리, 배경 패럴랙스, 매직 넘버 노출, Find 캐싱)
 3. (2026-08-17) 재미 요소 5종(동물별 능력치, 실시간 순위 HUD, 포토피니시, 부스트/장애물 존, 로컬 기록 저장) 구현 + 그중 3종은 플레이 전 온오프 토글 지원
 4. (2026-08-17) Unity가 6000.5.8f1로 업그레이드됨(사용자가 새 에디터로 프로젝트를 열면서 자동 발생) + Unity MCP(CoplayDev/unity-mcp) 연결 성공
-5. (2026-08-17) 컴파일을 막던 미사용 `TextMesh Pro/Examples & Extras` 폴더 제거
-6. (2026-08-17) **Unity MCP로 필수 배선(이슈 #1~#3) 완료 + Play 모드에서 전체 플로우 실동작 검증(이슈 #12)**. 검증 중 `TMP_Dropdown` 관련 실버그 발견·수정.
+5. (2026-08-17) 컴파일을 막던 미사용 `TextMesh Pro/Examples & Extras` 폴더 제거(이후 TMP 리소스 재확인 과정에서 두 번 더 재생성되어 그때마다 삭제 + `.gitignore`에 추가)
+6. (2026-08-17) **Unity MCP로 필수 배선(이슈 #1~#3) 완료 + Play 모드 전체 플로우 검증(이슈 #12)**. 검증 중 `TMP_Dropdown` 관련 실버그 발견·수정.
+7. (2026-08-17) **Unity MCP로 선택 기능 이슈 #4~#11 전부 씬 배선 완료** (신호등/동물선택화면/AnimalVisual/실시간HUD/포토피니시/부스트존/온오프토글). #7(배경 패럴랙스)만 안전한 부착 대상이 없어 보류.
 
-**현재 상태 요약**: 필수 배선(#1~#3)과 QA(#12)는 Unity MCP로 완료·검증됨 — **씬을 Play 하면 시작 화면부터 재시작까지 핵심 루프가 정상 동작**. 남은 건 선택 기능 UI 배치(#4~#11)와 신규 기능/정리 이슈뿐. ([이슈 목록](https://github.com/sw0501/horse-racing-game/issues))
+**현재 상태 요약**: 등록된 이슈 17개 중 **#1~#6, #8~#12(11개) 완료**, **#7만 보류**(안전한 배경 레이어 없음), **#13~#17(신규 기능/정리)은 미착수**. 씬을 Play 하면 시작 화면 → 마릿수/동물/옵션 선택 → 신호등 → 경주(부스트존·포토피니시 포함) → 결과 화면(실시간 HUD 포함) → 재시작까지 전체 기능이 배선된 상태. ([이슈 목록](https://github.com/sw0501/horse-racing-game/issues))
 
 ### 등록된 이슈
 
@@ -17,27 +18,27 @@
 - [x] [#2 EndMenu 구성 (결과 화면 + 처음으로 버튼)](https://github.com/sw0501/horse-racing-game/issues/2) — closed
 - [x] [#3 NextButton에 OnHorseCountConfirmed 연결](https://github.com/sw0501/horse-racing-game/issues/3) — closed
 
-**기능별 에디터 배치** (선택 기능)
-- [#4 출발 신호등 UI 제작](https://github.com/sw0501/horse-racing-game/issues/4)
-- [#5 ChooseName 동물 선택 화면 구성 + Fox/Rabbit Animator Controller 제작](https://github.com/sw0501/horse-racing-game/issues/5)
-- [#6 말 오브젝트에 AnimalVisual 부착 및 Controller 연결](https://github.com/sw0501/horse-racing-game/issues/6)
-- [#7 배경 패럴랙스 레이어 배치](https://github.com/sw0501/horse-racing-game/issues/7)
-- [#8 실시간 순위 HUD 배치](https://github.com/sw0501/horse-racing-game/issues/8)
-- [#9 포토피니시 연출 오브젝트 배치](https://github.com/sw0501/horse-racing-game/issues/9)
-- [#10 부스트/장애물 존 배치](https://github.com/sw0501/horse-racing-game/issues/10)
-- [#11 게임 옵션 온오프 토글 UI 배치](https://github.com/sw0501/horse-racing-game/issues/11)
+**기능별 에디터 배치** — #7 제외 전부 완료
+- [x] [#4 출발 신호등 UI 제작](https://github.com/sw0501/horse-racing-game/issues/4) — closed. 3색 UI Image 생성·연결, 첫 점등까지 Play 확인. 코루틴 타이머 실완주는 에디터 언포커스(macOS App Nap)로 이 세션에서 재현 못함.
+- [x] [#5 ChooseName 동물 선택 화면 구성](https://github.com/sw0501/horse-racing-game/issues/5) — closed. 버튼 5개(Fox/Rabbit 제외) 생성·연결, Play 모드에서 Boar 선택 시 Animator·스탯 반영까지 확인.
+- [x] [#6 말 오브젝트에 AnimalVisual 부착 및 Controller 연결](https://github.com/sw0501/horse-racing-game/issues/6) — closed.
+- [ ] [#7 배경 패럴랙스 레이어 배치](https://github.com/sw0501/horse-racing-game/issues/7) — **보류**. `Map`이 배경 스프라이트가 아니라 트랙 데코 전체(자식 ~350개)를 담은 컨테이너라 패럴랙스를 붙이면 시각적으로 깨짐. 전용 원경 레이어 아트가 있어야 진행 가능.
+- [x] [#8 실시간 순위 HUD 배치](https://github.com/sw0501/horse-racing-game/issues/8) — closed.
+- [x] [#9 포토피니시 연출 오브젝트 배치](https://github.com/sw0501/horse-racing-game/issues/9) — closed.
+- [x] [#10 부스트/장애물 존 배치](https://github.com/sw0501/horse-racing-game/issues/10) — closed. `HosreDieOn`과 동일한 트리거 패턴으로 트랙 중간(x=60)에 배치.
+- [x] [#11 게임 옵션 온오프 토글 UI 배치](https://github.com/sw0501/horse-racing-game/issues/11) — closed.
 
 **QA** — ✅ 완료
 - [x] [#12 전체 플로우 동작 확인](https://github.com/sw0501/horse-racing-game/issues/12) — closed. Play 모드에서 시작화면→3마리 선택→Next→동물확정→4.5초 대기→경주→완주(1,2,3등 순위 텍스트)→로컬 기록 저장→EndMenu→처음으로→StartMenu 복귀까지 실제로 확인함.
 
-**신규 기능**
-- [#13 베팅(예측) 시스템 추가](https://github.com/sw0501/horse-racing-game/issues/13)
-- [#14 효과음 강화](https://github.com/sw0501/horse-racing-game/issues/14)
-- [#15 날씨/트랙 컨디션 랜덤 이벤트](https://github.com/sw0501/horse-racing-game/issues/15)
+**신규 기능** — 미착수
+- [ ] [#13 베팅(예측) 시스템 추가](https://github.com/sw0501/horse-racing-game/issues/13)
+- [ ] [#14 효과음 강화](https://github.com/sw0501/horse-racing-game/issues/14)
+- [ ] [#15 날씨/트랙 컨디션 랜덤 이벤트](https://github.com/sw0501/horse-racing-game/issues/15)
 
-**정리**
-- [#16 스텁 스크립트(HorseRemoveLine, test) 정리](https://github.com/sw0501/horse-racing-game/issues/16)
-- [#17 레포/빌드 관리 프로세스 정리](https://github.com/sw0501/horse-racing-game/issues/17)
+**정리** — 미착수
+- [ ] [#16 스텁 스크립트(HorseRemoveLine, test) 정리](https://github.com/sw0501/horse-racing-game/issues/16)
+- [ ] [#17 레포/빌드 관리 프로세스 정리](https://github.com/sw0501/horse-racing-game/issues/17)
 
 ## 완료된 기능 (기존)
 
@@ -81,12 +82,12 @@ README에 명시된 3가지 핵심 기능:
 ### 3. 플레이어 동물 선택 기능
 - [x] 스크립트 구현 — `RaceConfig.cs`(`AnimalType` enum), `AnimalVisual.cs`(Animator Controller 교체), `AnimalSelectController.cs`(버튼 핸들러).
 - [x] **범위 축소 결정**: 레인별 개별 동물이 아니라 참가자 전원이 같은 동물 종으로 통일되도록 구현(레인별 선택은 UI 복잡도가 크게 늘어나 이번 범위에서 제외, 필요시 추후 확장).
-- [ ] 에디터 연결 — 체크리스트 5, 6번 참고. `ChooseName` 화면 자체를 새로 만들어야 함.
-- [ ] Fox/Rabbit용 Animator Controller 애셋 제작(현재 스프라이트만 있고 컨트롤러 없음).
+- [x] 에디터 연결 — 완료(이슈 #5, #6). `ChooseName`에 버튼 5개(Horse/Bear/Boar/Deer/Wolf) 생성, `horse_1`~`5`에 `AnimalVisual` 부착 및 컨트롤러 매핑. Play 모드에서 Boar 선택 시 Animator·스탯 반영까지 확인.
+- [ ] Fox/Rabbit용 Animator Controller 애셋 제작 — 여전히 미해결(원본 스프라이트가 슬라이스 안 된 정지 이미지라 아트 리소스 추가 필요, 코드로 대체 불가).
 
 ### 4. 출발 직전 신호등 UI
 - [x] 스크립트 구현 — `StartLightController.cs`(순차 점등 후 `wait.BeginWait(0f)` 호출, 자체 지연이 `wait.cs`의 기본 4.5초를 대체).
-- [ ] 신호등 스프라이트/UI 제작 및 에디터 연결(선택 사항, 없으면 자동으로 기존 4.5초 무연출 대기로 대체됨) — 체크리스트 3번 참고.
+- [x] 에디터 연결 — 완료(이슈 #4). 빨강/노랑/초록 UI Image 3개(별도 스프라이트 없이 색상만 사용) 생성 및 연결. Play 모드에서 점등 시작까지 확인(코루틴 실완주는 에디터 언포커스 이슈로 이 세션에서 끝까지 재현은 못함).
 
 ### 5. 동물 움직임 y축 추가
 - [x] 스크립트 구현 완료 — `Horse_Move.cs`: 시작 y좌표(`startY`) 기준 `verticalWobbleRange`(기본 0.3) 내에서 매 프레임 `verticalWobbleSpeed`(기본 0.05)만큼 랜덤 누적·클램프. x축 전진 로직은 유지. **에디터 작업 불필요, 바로 동작.**
@@ -101,56 +102,39 @@ README에 명시된 3가지 핵심 기능:
 
 ## 에디터 작업 체크리스트 (Unity에서 사람이 직접 해야 함)
 
-**Unity MCP(CoplayDev/unity-mcp) 연결 후 1, 2, 4, 7번(필수 배선 + QA)은 완료됨.** 남은 항목은 3, 5, 6, 8~12번(선택 기능 배치).
+**전부 완료. 8번(배경 패럴랙스)만 안전한 부착 대상이 없어 보류.** Unity MCP(CoplayDev/unity-mcp)로 1~7, 9~12번 전부 처리함.
 
-- [x] **1. GameManager 오브젝트 생성** — 완료(이슈 #1). `GameManager` 오브젝트에 `GameFlowController` 부착, `startMenu`/`chooseAnimalMenu`/`endMenu`/`horseNumberSelector`/`waitScript`/`endMenuController` 필드 연결됨. `startLight`/`liveRanking`/토글 3종은 아래 3, 8, 11번 완료 후 추가 연결 필요.
+- [x] **1. GameManager 오브젝트 생성** — 완료(이슈 #1). `GameManager`에 `GameFlowController` 부착. 모든 필드(`startMenu`/`chooseAnimalMenu`/`endMenu`/`horseNumberSelector`/`waitScript`/`endMenuController`/`startLight`/`liveRanking`/토글 3종) 연결 완료.
 
 - [x] **2. EndMenu 구성** — 완료(이슈 #2). `EndMenuController` 부착, `ReturnToStartButton`("처음으로" 버튼) + `RecordSummaryText` 생성 및 연결, `HorseOff.gameFlow` 연결까지 끝남. 최종 순위는 `Ranking`이 `EndMenu`보다 Canvas 자식 순서상 위라 별도 텍스트 복제 없이 그대로 보임.
 
-- [ ] **3. 신호등 UI (선택 사항, 없으면 4.5초 무연출 대기로 대체됨)**
-  - 신호등 역할을 할 GameObject/스프라이트 2~3개(빨강/노랑/초록 등)를 만들고 빈 GameObject에 `StartLightController`를 붙여 `lights` 배열에 순서대로 연결.
-  - `waitScript` 필드에 기존 `wait` 컴포넌트를 연결.
-  - `GameManager`의 `GameFlowController.startLight` 필드에 이 컴포넌트를 연결(연결하지 않으면 자동으로 신호등 없이 기존 4.5초 대기로 진행됨 — 정상 동작).
+- [x] **3. 신호등 UI** — 완료(이슈 #4). `StartLightPanel` 아래 빨강/노랑/초록 UI Image 3개(색상만 사용, 별도 스프라이트 불필요) 생성, `StartLightController.lights`/`waitScript`, `GameFlowController.startLight` 연결. Play 모드에서 점등 시작 확인.
 
 - [x] **4. NextButton 추가 연결** — 완료(이슈 #3). `execute_code`로 `UnityEventTools.AddPersistentListener` 사용해 기존 호출(`StartMenu.SetActive(false)`, `ChooseName.SetActive`) 유지한 채 `GameFlowController.OnHorseCountConfirmed` 추가.
 
-- [ ] **5. ChooseName(동물 선택) 화면 구성**
-  - `ChooseName`은 현재 완전히 빈 오브젝트임. 동물 수만큼(Horse/Bear/Boar/Deer/Fox/Wolf/Rabbit) 버튼을 만들고, `AnimalSelectController` 스크립트를 붙인 오브젝트를 하나 만들어 `flow` 필드에 `GameFlowController`를 연결.
-  - 각 버튼의 OnClick에 `AnimalSelectController.SelectAnimal`을 연결하고 정수 인자를 `AnimalType` 순서(0=Horse, 1=Bear, 2=Boar, 3=Deer, 4=Fox, 5=Wolf, 6=Rabbit)에 맞게 지정.
-  - `ChooseName` 화면을 만들지 않고 건너뛰려면 `GameFlowController.chooseAnimalMenu` 필드를 비워두면 됨(자동으로 동물 선택 없이 바로 경주 시작).
+- [x] **5. ChooseName(동물 선택) 화면 구성** — 완료(이슈 #5). 버튼 5개(말/곰/멧돼지/사슴/늑대, Fox·Rabbit 제외) 생성, `AnimalSelectController` 부착·연결, 각 버튼에 `SelectAnimal(int)` 연결. **주의**: `AnimalType` enum이 `Horse=0,Bear=1,Boar=2,Deer=3,Fox=4,Wolf=5,Rabbit=6`이라 Fox(4)를 건너뛰므로 늑대 버튼은 반드시 `5`로 연결해야 함 — 처음에 순차 인덱스(0~4)로 잘못 연결해서 늑대가 Fox를 가리키는 버그가 있었고 발견 즉시 수정함.
 
-- [ ] **6. 말 오브젝트에 AnimalVisual 부착**
-  - `horse_1`~`horse_5` 각각에 `AnimalVisual` 컴포넌트를 붙이고 `controllers` 배열에 `AnimalType`별 `RuntimeAnimatorController`를 지정.
-    - Horse → 기존에 쓰던 말 컨트롤러(각 horse_N에 이미 할당된 것과 동일한 애셋).
+- [x] **6. 말 오브젝트에 AnimalVisual 부착** — 완료(이슈 #6). `horse_1`~`5`에 `AnimalVisual` 부착, `controllers` 배열에 5종 컨트롤러 매핑:
+    - Horse → `Assets/horse/GameObject.controller`
     - Bear → `Assets/Wild Animals/Bear/Bear_Run.controller`
-    - Boar → `Assets/Wild Animals/Boar/Square.controller`(이름이 어색하지만 유일하게 존재하는 Boar용 컨트롤러)
+    - Boar → `Assets/Wild Animals/Boar/Boar_Run.controller` (처음엔 `Square.controller`만 있는 줄 알았는데, 정식 명명된 `Boar_Run.controller`가 따로 있었음)
     - Deer → `Assets/Wild Animals/Deer/Deer.controller`
     - Wolf → `Assets/Wild Animals/Wolf/Wolf.controller`
-    - Fox, Rabbit → **컨트롤러 애셋이 아직 없음.** 확인해보니 `Fox_Run.png` 등은 `spriteMode: 1`(Single) 즉 프레임이 여러 장으로 슬라이스된 스프라이트 시트가 아니라 정지 이미지 1장뿐임 — 애니메이션 클립을 만들려면 프레임이 나뉜 원본 아트가 추가로 필요하고, 이는 코드로 대체할 수 없는 아트 작업임. 급하면 `AnimalSelectController` 버튼에서 Fox/Rabbit 항목을 빼고 5종만 제공하거나, 정지 이미지 그대로 쓰는 Idle 전용 Animator Controller(단일 상태, 애니메이션 없이 스프라이트만 표시)로 대체.
+    - Fox, Rabbit → **여전히 컨트롤러 애셋 없음.** `Fox_Run.png` 등이 `spriteMode: 1`(Single, 슬라이스 안 된 정지 이미지 1장)이라 애니메이션 클립을 만들 재료가 없음 — 아트 리소스가 추가로 필요한 코드로 대체 불가능한 작업이라 5종만 제공하기로 함.
 
-- [x] **7. 동작 확인** — 완료(이슈 #12). Unity MCP `execute_code`로 Dropdown 값 변경 + 버튼 클릭을 코드로 시뮬레이션해 전체 플로우 1회 통관 확인(위 "현재 상태 요약" 참고). ChooseName은 아직 버튼이 없어 `OnAnimalConfirmed(0)`을 직접 호출해 대체 검증함 — 실제 버튼 UI가 생기면(#5) 재확인 권장.
+- [x] **7. 동작 확인** — 완료(이슈 #12). Unity MCP `execute_code`로 Dropdown 값 변경 + 버튼 클릭을 코드로 시뮬레이션해 전체 플로우 1회 통관 확인. Boar 동물 선택 시 Animator·스탯이 정확히 바뀌는 것도 별도로 재확인함(이슈 #5).
 
-- [ ] **8. 배경 패럴랙스(선택 사항)**
-  - 배경 레이어로 쓸 오브젝트(예: 기존 `Background` 타일과 별도로 더 뒤에 배치할 원경 레이어)에 `Backgorund_Move` 컴포넌트를 붙이고 `cameraTransform`에 메인 카메라를 연결(비워두면 `Camera.main`을 자동 사용).
-  - `parallaxFactor`(0~1)로 카메라 대비 이동 비율 조절 — 낮을수록 더 멀리 있는 느낌.
+- [ ] **8. 배경 패럴랙스(선택 사항, 보류)**
+  - 조사 결과 `Map` 오브젝트가 배경 스프라이트 하나가 아니라 트랙 데코 전체(자식 약 350개)를 담은 컨테이너였음 — 여기 `Backgorund_Move`를 붙이면 트랙 전체가 카메라와 별도로 움직여 시각적으로 깨짐.
+  - 진행하려면 카메라보다 뒤쪽(낮은 z-order/원경)에 배치할 **전용 배경 이미지 애셋**이 먼저 필요함. 애셋이 생기면 그 오브젝트에 `Backgorund_Move` 부착 + `parallaxFactor`(0~1, 낮을수록 더 멀리 있는 느낌) 설정.
 
-- [ ] **9. 실시간 순위 HUD 배치**
-  - `Canvas` 하위에 TMP_Text 오브젝트를 하나 새로 만들어(예: 화면 좌상단) `LiveRankingController` 컴포넌트를 붙인 오브젝트(별도 빈 GameObject 또는 그 텍스트 오브젝트 자신)에서 `liveRankingText` 필드에 연결.
-  - `GameManager`의 `GameFlowController.liveRanking` 필드에 이 컴포넌트를 연결(비워두면 자동 정지 기능만 생략되고 HUD 자체는 계속 동작 — 필수 아님).
+- [x] **9. 실시간 순위 HUD 배치** — 완료(이슈 #8). `Canvas` 하위에 `LiveRankingHUD`(TMP_Text, 화면 좌상단) 생성, `LiveRankingController.liveRankingText`/`GameFlowController.liveRanking` 연결.
 
-- [ ] **10. 포토피니시 연출 배치**
-  - 빈 GameObject(예: `PhotoFinish`)를 만들어 `PhotoFinishController`를 붙임. `raceCamera` 필드는 비워두면 `Camera.main` 자동 사용.
-  - `HorseOff` 컴포넌트의 `photoFinish` 필드에 연결(비워두면 연출 없이 기존 순위 기록 동작만 유지).
-  - 필요시 `slowMotionScale`(기본 0.2), `slowMotionDurationSeconds`(기본 1.5초), `zoomOrthographicSize`(기본 3), `photoFinishThresholdSeconds`(HorseOff 쪽, 기본 0.3초)를 플레이테스트하며 조정.
+- [x] **10. 포토피니시 연출 배치** — 완료(이슈 #9). `PhotoFinish` 오브젝트 생성, `PhotoFinishController` 부착, `HorseOff.photoFinish` 연결.
 
-- [ ] **11. 부스트/장애물 존 배치**
-  - 트랙 위 원하는 위치에 트리거 콜라이더(2D)가 달린 오브젝트를 만들고 `BoostZone` 컴포넌트를 붙임.
-  - `speedMultiplier`(1보다 크면 부스트, 작으면 감속/장애물)와 `durationSeconds`를 구간별로 다르게 설정해 여러 개 배치 가능(`HosreDieOn`처럼 트랙 중간 아무 곳에나 놓을 수 있음).
+- [x] **11. 부스트/장애물 존 배치** — 완료(이슈 #10). `HosreDieOn`(`Die`)과 동일한 패턴(Rigidbody2D Dynamic + gravityScale 0, BoxCollider2D isTrigger 크기 1×15)으로 `BoostZone` 오브젝트를 트랙 중간(x=60, 출발 x=-9.2와 낙마구간 x=130 사이)에 배치, `speedMultiplier=1.6`/`durationSeconds=1`로 설정.
 
-- [ ] **12. 게임 시작 전 기능 온오프 토글 배치**
-  - `StartMenu` 안에 Toggle UI 3개(예: "동물별 능력치", "부스트/장애물 존", "기록 저장")를 새로 만듦.
-  - `GameManager`의 `GameFlowController`에서 `useAnimalStatsToggle`/`useBoostZonesToggle`/`saveLocalRecordsToggle` 필드에 각각 연결. 3개 모두 값은 `NextButton` 클릭 시점(`OnHorseCountConfirmed`)에 읽으므로 Toggle의 `OnValueChanged` 이벤트는 따로 연결할 필요 없음(마릿수 드롭다운과 동일한 패턴).
-  - 연결하지 않고 비워두면 해당 기능은 항상 켜진 것으로 동작(하위 호환).
+- [x] **12. 게임 시작 전 기능 온오프 토글 배치** — 완료(이슈 #11). `StartMenu`에 Toggle 3개("동물별 능력치"/"부스트·장애물 존"/"기록 저장", 기본 체크됨) 생성, `GameFlowController.useAnimalStatsToggle`/`useBoostZonesToggle`/`saveLocalRecordsToggle`에 연결.
 
 ## 개선하면 좋을 사항
 
@@ -166,16 +150,18 @@ README에 명시된 3가지 핵심 기능:
 
 - [ ] **베팅(예측) 시스템** — 레이스 시작 전 "이번 판 우승마"를 하나 찍게 하고, 결과 화면에서 적중 여부를 보여줌. 가상 포인트 + 배당률을 추가하면 더 재밌어짐.
 - [x] **동물별 능력치 차별화** — 신규 `AnimalStats.cs`: 종별로 `minSpeed`/`maxSpeed`/낙마 확률 배율(`fallRiskMultiplier`) 프로필을 정의(예: 곰=느리지만 낙마 확률 0.5배, 토끼=빠르지만 1.6배). `GameFlowController.ApplySelectedAnimal()`이 동물 선택 확정 시 해당 프로필을 `Horse_Move`에 적용. `RaceConfig.UseAnimalStats` 토글로 온오프 가능(꺼져 있으면 기존처럼 전종 동일 스탯).
-- [x] **실시간 순위 HUD** — 신규 `LiveRankingController.cs`: `horse_1`~`horse_5` 참조를 `CameraMove`와 동일한 방식으로 1회 캐싱한 뒤 `updateIntervalSeconds`(기본 0.2초)마다 x좌표 기준으로 정렬해 TMP_Text 1개에 "1위: N번" 줄바꿈 목록으로 갱신. `GameFlowController.OnRaceFinished()`에서 `liveRanking.enabled = false`로 자동 정지(필드 비워두면 무시). **에디터 작업 필요**: 목록을 표시할 TMP_Text 오브젝트 1개 신규 배치 + 연결.
-- [x] **접전 연출(포토피니시)** — 신규 `PhotoFinishController.cs`(카메라 `orthographicSize`를 줌인 → `Time.timeScale`을 낮춰 슬로우모션(실시간 `WaitForSecondsRealtime`으로 지속시간 보장) → 줌아웃 순서로 재생). `HorseOff.cs`가 1위 완주 시각을 기록해두고, 2위가 `photoFinishThresholdSeconds`(기본 0.3초) 이내에 들어오면 자동 트리거. **에디터 작업 필요**: 빈 오브젝트에 컴포넌트 부착 + `HorseOff.photoFinish` 필드 연결(비워두면 연출 없이 기존 동작 유지).
-- [x] **부스트/장애물 존** — `Horse_Move.cs`에 `ApplySpeedMultiplier(multiplier, duration)` 추가(1보다 크면 부스트, 작으면 감속, 시간 지나면 자동 원복). 신규 `BoostZone.cs`가 `HosreDieOn`과 동일한 트리거 패턴으로 진입한 말에게 배율 적용. `RaceConfig.UseBoostZones` 토글로 온오프 가능(꺼져 있으면 존에 들어와도 아무 효과 없음). **에디터 작업 필요**: 트랙 위에 트리거 콜라이더 오브젝트를 만들어 `BoostZone` 부착 + `speedMultiplier`/`durationSeconds` 튜닝(여러 구간에 배치 가능).
+- [x] **실시간 순위 HUD** — 신규 `LiveRankingController.cs`: `horse_1`~`horse_5` 참조를 `CameraMove`와 동일한 방식으로 1회 캐싱한 뒤 `updateIntervalSeconds`(기본 0.2초)마다 x좌표 기준으로 정렬해 TMP_Text 1개에 "1위: N번" 줄바꿈 목록으로 갱신. `GameFlowController.OnRaceFinished()`에서 `liveRanking.enabled = false`로 자동 정지. 에디터 배치 완료(이슈 #8).
+- [x] **접전 연출(포토피니시)** — 신규 `PhotoFinishController.cs`(카메라 `orthographicSize`를 줌인 → `Time.timeScale`을 낮춰 슬로우모션(실시간 `WaitForSecondsRealtime`으로 지속시간 보장) → 줌아웃 순서로 재생). `HorseOff.cs`가 1위 완주 시각을 기록해두고, 2위가 `photoFinishThresholdSeconds`(기본 0.3초) 이내에 들어오면 자동 트리거. 에디터 배치 완료(이슈 #9).
+- [x] **부스트/장애물 존** — `Horse_Move.cs`에 `ApplySpeedMultiplier(multiplier, duration)` 추가(1보다 크면 부스트, 작으면 감속, 시간 지나면 자동 원복). 신규 `BoostZone.cs`가 `HosreDieOn`과 동일한 트리거 패턴으로 진입한 말에게 배율 적용. `RaceConfig.UseBoostZones` 토글로 온오프 가능(꺼져 있으면 존에 들어와도 아무 효과 없음). 에디터 배치 완료(이슈 #10, 트랙 x=60 지점).
 - [ ] **효과음 강화** — 낙마 효과음, 결승선 통과 순위별 팡파레, 신호등 전환음(`StartLightController`에 붙이기 좋음) 추가.
 - [x] **로컬 기록 저장** — 신규 `LocalRecordManager.cs`(`PlayerPrefs` 기반): 레인 번호별 누적 우승 횟수, 총 플레이 판 수, 최고 완주 기록(초)을 저장. `wait.cs`가 말이 실제로 출발하는 시점을 `RaceConfig.RaceStartTime`에 기록해두고, `HorseOff.cs`가 1위 완주 시 해당 레인·소요시간을 저장. `EndMenuController.recordSummaryText`(선택 필드)에 연결하면 결과 화면에 "누적 N판 플레이 / 최고 기록 M초" 요약 표시. `RaceConfig.SaveLocalRecords` 토글로 온오프 가능.
 - [ ] **날씨/트랙 컨디션 랜덤 이벤트** — 판마다 "비 오는 날(속도 -20%)", "맑은 날(낙마 확률 감소)" 등을 시작 화면에 랜덤 노출해 매판 다른 느낌 부여.
 
 ## 알려진 이슈 / 정리 필요 사항
 
-- [ ] 자동화된 빌드/테스트/CI 파이프라인 없음 — Unity Editor(2021.3.22f1)에서 수동 실행/빌드만 가능.
+- [ ] 자동화된 빌드/테스트/CI 파이프라인 없음 — Unity Editor(현재 6000.5.8f1 — 2026-08-17에 사용자가 새 에디터로 프로젝트를 열며 2021.3.22f1에서 자동 업그레이드됨)에서 수동 실행/빌드만 가능.
 - [ ] `build.zip`처럼 바이너리 빌드 산출물을 저장소에 직접 커밋하는 방식 유지 여부 검토(용량 이슈).
 - [ ] 스텁 스크립트(`HorseRemoveLine`, `test`) 실제 구현 여부 결정 필요.
 - [ ] Fox/Rabbit용 Animator Controller가 없어 동물 선택 목록에 아직 넣을 수 없음(원본 스프라이트가 슬라이스 안 된 정지 이미지 1장뿐이라 아트 리소스 추가 필요).
+- [ ] `Assets/TextMesh Pro/Examples & Extras/`가 TMP 리소스 재확인 시 자동 재생성됨(우리 게임과 무관, `.gitignore`로 git 추적은 막아뒀지만 로컬 디스크에는 계속 생길 수 있음).
+- [ ] 배경 패럴랙스(#7)용 전용 원경 배경 아트 애셋 필요 — 없으면 진행 불가.
