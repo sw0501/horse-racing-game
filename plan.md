@@ -1,18 +1,21 @@
 # 경마 게임 — 진행 상황
 
-마지막 커밋: `8635549` "Feat: 빌드 파일 추가" (2024-04-29). 이후 2026-08-15~17에 아래 작업을 진행:
-1. 신규 기능 7종(시작 화면, 참가 인원 조절, 동물 선택, 신호등, y축 이동, 결과 화면, 재시작) 스크립트 레이어 구현
-2. 코드/에셋 개선사항 4종 반영(중복 에셋 정리, 배경 패럴랙스, 매직 넘버 노출, Find 캐싱)
-3. 재미 요소 5종(동물별 능력치, 실시간 순위 HUD, 포토피니시, 부스트/장애물 존, 로컬 기록 저장) 구현 + 그중 3종은 플레이 전 온오프 토글 지원
+마지막 커밋: `210dc35` "Fix: TMP_Dropdown 버그 수정 및 Unity MCP로 씬 배선(이슈 #1~#3) 완료" (2026-08-17). 진행 이력:
+1. (2026-08-15~17) 신규 기능 7종(시작 화면, 참가 인원 조절, 동물 선택, 신호등, y축 이동, 결과 화면, 재시작) 스크립트 레이어 구현
+2. (2026-08-17) 코드/에셋 개선사항 4종 반영(중복 에셋 정리, 배경 패럴랙스, 매직 넘버 노출, Find 캐싱)
+3. (2026-08-17) 재미 요소 5종(동물별 능력치, 실시간 순위 HUD, 포토피니시, 부스트/장애물 존, 로컬 기록 저장) 구현 + 그중 3종은 플레이 전 온오프 토글 지원
+4. (2026-08-17) Unity가 6000.5.8f1로 업그레이드됨(사용자가 새 에디터로 프로젝트를 열면서 자동 발생) + Unity MCP(CoplayDev/unity-mcp) 연결 성공
+5. (2026-08-17) 컴파일을 막던 미사용 `TextMesh Pro/Examples & Extras` 폴더 제거
+6. (2026-08-17) **Unity MCP로 필수 배선(이슈 #1~#3) 완료 + Play 모드에서 전체 플로우 실동작 검증(이슈 #12)**. 검증 중 `TMP_Dropdown` 관련 실버그 발견·수정.
 
-**현재 상태 요약**: C# 스크립트 레이어는 전부 구현·컴파일 확인 완료. 이 환경은 Unity 에디터 GUI를 조작할 수 없어 씬 UI 생성·Inspector 연결은 전혀 못했음 — 즉 **에디터 연결 작업(아래 체크리스트 12개 항목)이 하나도 안 된 상태**라 지금 Play를 눌러도 게임이 정상 동작하지 않음. 남은 작업은 전부 GitHub 이슈로 등록함 ([이슈 목록](https://github.com/sw0501/horse-racing-game/issues)).
+**현재 상태 요약**: 필수 배선(#1~#3)과 QA(#12)는 Unity MCP로 완료·검증됨 — **씬을 Play 하면 시작 화면부터 재시작까지 핵심 루프가 정상 동작**. 남은 건 선택 기능 UI 배치(#4~#11)와 신규 기능/정리 이슈뿐. ([이슈 목록](https://github.com/sw0501/horse-racing-game/issues))
 
 ### 등록된 이슈
 
-**필수 배선** (이게 끝나야 Play로 게임이 돌아감)
-- [#1 GameManager 오브젝트 생성 및 GameFlowController 필드 연결](https://github.com/sw0501/horse-racing-game/issues/1)
-- [#2 EndMenu 구성 (결과 화면 + 처음으로 버튼)](https://github.com/sw0501/horse-racing-game/issues/2)
-- [#3 NextButton에 OnHorseCountConfirmed 연결](https://github.com/sw0501/horse-racing-game/issues/3)
+**필수 배선** — ✅ 완료 (Unity MCP로 처리, Play 모드 검증까지 끝남)
+- [x] [#1 GameManager 오브젝트 생성 및 GameFlowController 필드 연결](https://github.com/sw0501/horse-racing-game/issues/1) — closed
+- [x] [#2 EndMenu 구성 (결과 화면 + 처음으로 버튼)](https://github.com/sw0501/horse-racing-game/issues/2) — closed
+- [x] [#3 NextButton에 OnHorseCountConfirmed 연결](https://github.com/sw0501/horse-racing-game/issues/3) — closed
 
 **기능별 에디터 배치** (선택 기능)
 - [#4 출발 신호등 UI 제작](https://github.com/sw0501/horse-racing-game/issues/4)
@@ -24,8 +27,8 @@
 - [#10 부스트/장애물 존 배치](https://github.com/sw0501/horse-racing-game/issues/10)
 - [#11 게임 옵션 온오프 토글 UI 배치](https://github.com/sw0501/horse-racing-game/issues/11)
 
-**QA**
-- [#12 전체 플로우 동작 확인](https://github.com/sw0501/horse-racing-game/issues/12) (#1~#11 이후 진행)
+**QA** — ✅ 완료
+- [x] [#12 전체 플로우 동작 확인](https://github.com/sw0501/horse-racing-game/issues/12) — closed. Play 모드에서 시작화면→3마리 선택→Next→동물확정→4.5초 대기→경주→완주(1,2,3등 순위 텍스트)→로컬 기록 저장→EndMenu→처음으로→StartMenu 복귀까지 실제로 확인함.
 
 **신규 기능**
 - [#13 베팅(예측) 시스템 추가](https://github.com/sw0501/horse-racing-game/issues/13)
@@ -69,11 +72,11 @@ README에 명시된 3가지 핵심 기능:
 
 ### 1. 게임 시작 화면
 - [x] 스크립트 구현 — `GameFlowController.cs`(`Awake()`에서 `StartMenu` 활성화, `ChooseName`/`EndMenu` 비활성화, `RaceConfig` 초기화) + `wait.cs`(자동 실행 제거, `BeginWait()` 공개 메서드로 전환).
-- [ ] 에디터 연결 — 체크리스트 1, 4번 참고. **연결 전까지는 Play 해도 경주가 시작되지 않음.**
+- [x] 에디터 연결 — Unity MCP로 `GameManager` 생성 + 필드 연결, `NextButton.onClick` 배선 완료(이슈 #1, #3). Play 모드 실동작 검증 완료.
 
 ### 2. 참가 플레이어 수 조절 기능
 - [x] 스크립트 구현 — `GameFlowController.OnHorseCountConfirmed()`, `CameraMove.cs`(하드코딩 5마리 제거, `RaceConfig.HorseCount` 기반 순회로 재작성), `HorseOff.cs`(완주 인원 도달 시 `OnRaceFinished()` 호출), `Select_Horse_Number.cs`(드롭다운 → `RaceConfig` 반영).
-- [ ] 에디터 연결 — 체크리스트 1, 4번 참고.
+- [x] 에디터 연결 — 완료(이슈 #1, #3). **버그 발견·수정**: 실제 드롭다운 컴포넌트가 `UnityEngine.UI.Dropdown`이 아니라 `TMPro.TMP_Dropdown`이었음 — 원래 코드대로였으면 NextButton 클릭 시 NullReferenceException 발생. `GameFlowController.cs`/`Select_Horse_Number.cs` 모두 수정. Play 모드에서 3마리로 설정 → 정상 반영 확인.
 
 ### 3. 플레이어 동물 선택 기능
 - [x] 스크립트 구현 — `RaceConfig.cs`(`AnimalType` enum), `AnimalVisual.cs`(Animator Controller 교체), `AnimalSelectController.cs`(버튼 핸들러).
@@ -90,34 +93,26 @@ README에 명시된 3가지 핵심 기능:
 
 ### 6. 게임 종료 후 순위 보여주는 화면
 - [x] 스크립트 구현 — `EndMenuController.cs`(`ShowResults()`), `HorseOff.cs` → `GameFlowController.OnRaceFinished()` → `EndMenuController.ShowResults()` 연쇄 호출.
-- [ ] 에디터 작업 — `EndMenu`에 순위 텍스트 배치(현재 배경 스프라이트만 있음) 및 연결. 체크리스트 2번 참고.
+- [x] 에디터 작업 — Unity MCP로 `EndMenuController` 부착 + `RecordSummaryText` 생성/연결 완료(이슈 #2). 최종 순위는 `Ranking`(Canvas 자식 순서상 `EndMenu`보다 위에 렌더링됨)이 그대로 보여주는 방식으로 처리 — 별도 텍스트 복제 불필요했음. Play 모드에서 완주 후 `EndMenu` 자동 노출 + 순위 텍스트 정상 확인.
 
 ### 7. 게임 시작 화면으로 돌아가는 기능
 - [x] 스크립트 구현 완료 — `EndMenuController.ReturnToStart()`가 `SceneManager.LoadScene(현재 씬)`으로 전체 상태를 재로드 방식으로 초기화(필드 단위 수동 리셋보다 안전하다고 판단해 이 방식 채택). 씬이 하나뿐이라 별도 시작 화면 씬 불필요.
-- [ ] 에디터 작업 — `EndMenu`에 "처음으로" 버튼 생성 및 연결. 체크리스트 2번 참고.
+- [x] 에디터 작업 — Unity MCP로 `ReturnToStartButton` 생성 + `EndMenuController.ReturnToStart` 연결 완료(이슈 #2). Play 모드에서 클릭 시 씬 재로드 및 `StartMenu` 재노출 확인.
 
 ## 에디터 작업 체크리스트 (Unity에서 사람이 직접 해야 함)
 
-**⚠️ 아래 작업 전부가 끝나기 전까지는 `wait.cs`가 더 이상 자동 실행되지 않으므로, 씬을 그냥 Play 하면 경주가 시작되지 않음.**
+**Unity MCP(CoplayDev/unity-mcp) 연결 후 1, 2, 4, 7번(필수 배선 + QA)은 완료됨.** 남은 항목은 3, 5, 6, 8~12번(선택 기능 배치).
 
-- [ ] **1. GameManager 오브젝트 생성**
-  - 빈 GameObject(예: `GameManager`)를 씬 루트에 생성하고 `GameFlowController` 스크립트를 붙임.
-  - Inspector에서 연결: `startMenu`=`StartMenu`, `chooseAnimalMenu`=`ChooseName`, `endMenu`=`EndMenu`, `horseNumberSelector`=`SelectHorseNum`(Select_Horse_Number 컴포넌트), `waitScript`=기존 `wait` 컴포넌트가 붙은 오브젝트, `startLight`=3번에서 만들 신호등 컨트롤러(선택), `endMenuController`=2번에서 만들 컴포넌트.
+- [x] **1. GameManager 오브젝트 생성** — 완료(이슈 #1). `GameManager` 오브젝트에 `GameFlowController` 부착, `startMenu`/`chooseAnimalMenu`/`endMenu`/`horseNumberSelector`/`waitScript`/`endMenuController` 필드 연결됨. `startLight`/`liveRanking`/토글 3종은 아래 3, 8, 11번 완료 후 추가 연결 필요.
 
-- [ ] **2. EndMenu 구성**
-  - `EndMenu` 오브젝트(또는 그 자식)에 `EndMenuController` 스크립트를 붙이고 `endMenu` 필드에 `EndMenu` 자기 자신을 연결.
-  - `EndMenu` 안에 "처음으로" 버튼을 새로 만들고 OnClick에 `EndMenuController.ReturnToStart` 연결.
-  - 최종 순위를 보여줄 텍스트(예: `Ranking`의 5개 TMP_Text를 그대로 자식으로 옮기거나 복제)를 배치.
-  - `HorseOff` 컴포넌트의 새 `gameFlow` 필드에 1번에서 만든 `GameFlowController`를 연결.
-  - (선택) TMP_Text를 하나 더 추가해 `EndMenuController.recordSummaryText`에 연결하면 "누적 N판 플레이 / 최고 기록 M초" 요약이 표시됨(로컬 기록 저장 기능용).
+- [x] **2. EndMenu 구성** — 완료(이슈 #2). `EndMenuController` 부착, `ReturnToStartButton`("처음으로" 버튼) + `RecordSummaryText` 생성 및 연결, `HorseOff.gameFlow` 연결까지 끝남. 최종 순위는 `Ranking`이 `EndMenu`보다 Canvas 자식 순서상 위라 별도 텍스트 복제 없이 그대로 보임.
 
 - [ ] **3. 신호등 UI (선택 사항, 없으면 4.5초 무연출 대기로 대체됨)**
   - 신호등 역할을 할 GameObject/스프라이트 2~3개(빨강/노랑/초록 등)를 만들고 빈 GameObject에 `StartLightController`를 붙여 `lights` 배열에 순서대로 연결.
   - `waitScript` 필드에 기존 `wait` 컴포넌트를 연결.
   - `GameManager`의 `GameFlowController.startLight` 필드에 이 컴포넌트를 연결(연결하지 않으면 자동으로 신호등 없이 기존 4.5초 대기로 진행됨 — 정상 동작).
 
-- [ ] **4. NextButton 추가 연결**
-  - `NextButton`의 OnClick 리스트에 기존 `StartMenu.SetActive(false)` 호출은 그대로 두고, 새 호출을 추가: `GameFlowController.OnHorseCountConfirmed`.
+- [x] **4. NextButton 추가 연결** — 완료(이슈 #3). `execute_code`로 `UnityEventTools.AddPersistentListener` 사용해 기존 호출(`StartMenu.SetActive(false)`, `ChooseName.SetActive`) 유지한 채 `GameFlowController.OnHorseCountConfirmed` 추가.
 
 - [ ] **5. ChooseName(동물 선택) 화면 구성**
   - `ChooseName`은 현재 완전히 빈 오브젝트임. 동물 수만큼(Horse/Bear/Boar/Deer/Fox/Wolf/Rabbit) 버튼을 만들고, `AnimalSelectController` 스크립트를 붙인 오브젝트를 하나 만들어 `flow` 필드에 `GameFlowController`를 연결.
@@ -133,8 +128,7 @@ README에 명시된 3가지 핵심 기능:
     - Wolf → `Assets/Wild Animals/Wolf/Wolf.controller`
     - Fox, Rabbit → **컨트롤러 애셋이 아직 없음.** 확인해보니 `Fox_Run.png` 등은 `spriteMode: 1`(Single) 즉 프레임이 여러 장으로 슬라이스된 스프라이트 시트가 아니라 정지 이미지 1장뿐임 — 애니메이션 클립을 만들려면 프레임이 나뉜 원본 아트가 추가로 필요하고, 이는 코드로 대체할 수 없는 아트 작업임. 급하면 `AnimalSelectController` 버튼에서 Fox/Rabbit 항목을 빼고 5종만 제공하거나, 정지 이미지 그대로 쓰는 Idle 전용 Animator Controller(단일 상태, 애니메이션 없이 스프라이트만 표시)로 대체.
 
-- [ ] **7. 동작 확인**
-  - Play 진입 → `StartMenu` 표시 확인 → 마릿수 선택 후 Next → (동물 선택 화면 구성했다면) 동물 선택 → 신호등(구성했다면) → 경주 자동 시작 → 결승 후 `EndMenu` 노출 → "처음으로" 버튼으로 `StartMenu` 복귀까지 전체 플로우 1회 통관.
+- [x] **7. 동작 확인** — 완료(이슈 #12). Unity MCP `execute_code`로 Dropdown 값 변경 + 버튼 클릭을 코드로 시뮬레이션해 전체 플로우 1회 통관 확인(위 "현재 상태 요약" 참고). ChooseName은 아직 버튼이 없어 `OnAnimalConfirmed(0)`을 직접 호출해 대체 검증함 — 실제 버튼 UI가 생기면(#5) 재확인 권장.
 
 - [ ] **8. 배경 패럴랙스(선택 사항)**
   - 배경 레이어로 쓸 오브젝트(예: 기존 `Background` 타일과 별도로 더 뒤에 배치할 원경 레이어)에 `Backgorund_Move` 컴포넌트를 붙이고 `cameraTransform`에 메인 카메라를 연결(비워두면 `Camera.main`을 자동 사용).
