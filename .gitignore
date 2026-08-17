@@ -80,3 +80,7 @@ CLAUDE.md
 # 게임에서 쓰지 않는 TMP 데모/샘플 콘텐츠 (Unity가 TMP 리소스 재확인 시 자동 재생성함)
 /Assets/TextMesh Pro/Examples & Extras/
 /Assets/TextMesh Pro/Examples & Extras.meta
+
+# Unity MCP 디버그 스크린샷
+/Assets/Screenshots/
+/Assets/Screenshots.meta

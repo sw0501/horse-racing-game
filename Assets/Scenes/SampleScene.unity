@@ -4543,6 +4543,7 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
+  fallSound: {fileID: 0}
 --- !u!61 &196394008
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11671,6 +11672,7 @@ MonoBehaviour:
   - {fileID: 1381936497}
   intervalSeconds: 1
   waitScript: {fileID: 741748093}
+  lightSound: {fileID: 0}
 --- !u!1 &486619631
 GameObject:
   m_ObjectHideFlags: 0
@@ -33892,6 +33894,7 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
+  fallSound: {fileID: 0}
 --- !u!61 &1546714314
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -34284,6 +34287,7 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
+  fallSound: {fileID: 0}
 --- !u!61 &1564187900
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -38076,6 +38080,7 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
+  fallSound: {fileID: 0}
 --- !u!61 &1700399713
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -39478,6 +39483,7 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
+  fallSound: {fileID: 0}
 --- !u!61 &1758016041
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -41727,6 +41733,7 @@ MonoBehaviour:
   gameFlow: {fileID: 577413738}
   photoFinish: {fileID: 1256500997}
   photoFinishThresholdSeconds: 0.3
+  rankFanfares: []
 --- !u!50 &1829593453
 Rigidbody2D:
   serializedVersion: 5
