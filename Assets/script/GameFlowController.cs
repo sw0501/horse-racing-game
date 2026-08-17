@@ -6,9 +6,10 @@ public class GameFlowController : MonoBehaviour
 {
     private const string HorseNamePrefix = "horse_";
 
-    public GameObject startMenu;
-    public GameObject chooseAnimalMenu;
+    [Header("화면 (메인/게임/종료)")]
+    public GameObject startMenu; // 메인 화면 — 별도 화면 느낌의 풀스크린 모달
     public GameObject endMenu;
+    public GameObject rankingPanel; // 게임 화면에서만 보이는 순위 HUD(완주 순서)
 
     public Select_Horse_Number horseNumberSelector;
     public StartLightController startLight;
@@ -16,7 +17,7 @@ public class GameFlowController : MonoBehaviour
     public EndMenuController endMenuController;
     public LiveRankingController liveRanking;
 
-    // 게임 플레이 전 온오프 선택용 토글(StartMenu에 배치). 비워두면 항상 켜진 것으로 간주.
+    // 게임 플레이 전 온오프 선택용 토글(메인 화면에 배치). 비워두면 항상 켜진 것으로 간주.
     public Toggle useAnimalStatsToggle;
     public Toggle useBoostZonesToggle;
     public Toggle saveLocalRecordsToggle;
@@ -34,16 +35,17 @@ public class GameFlowController : MonoBehaviour
             weatherText.text = "오늘의 날씨: " + RaceConfig.GetWeatherLabel();
         }
 
+        // 메인 화면만 보이고, 게임 화면/종료 화면 요소는 전부 숨김
         if (startMenu != null) startMenu.SetActive(true);
-        if (chooseAnimalMenu != null) chooseAnimalMenu.SetActive(false);
         if (endMenu != null) endMenu.SetActive(false);
-
-        // 신호등은 BeginRace() 직전까지는 화면에 보이면 안 됨(패널 배경이 항상 켜져 있으면 다른 화면과 겹침)
+        if (rankingPanel != null) rankingPanel.SetActive(false);
+        if (liveRanking != null) liveRanking.gameObject.SetActive(false);
         if (startLight != null) startLight.gameObject.SetActive(false);
     }
 
-    // NextButton의 OnClick에 추가로 연결 (기존 StartMenu.SetActive(false) 호출은 유지)
-    public void OnHorseCountConfirmed()
+    // 메인 화면의 "게임 시작" 버튼 OnClick에 연결 — 마릿수/옵션/동물/베팅 선택을 전부 확정하고
+    // 메인 화면 → 게임 화면으로 전환
+    public void OnGameStartClicked()
     {
         TMP_Dropdown dropdown = horseNumberSelector.GetComponent<TMP_Dropdown>();
         RaceConfig.SetHorseCountFromDropdown(dropdown.value);
@@ -52,33 +54,20 @@ public class GameFlowController : MonoBehaviour
         RaceConfig.UseAnimalStats = useAnimalStatsToggle == null || useAnimalStatsToggle.isOn;
         RaceConfig.UseBoostZones = useBoostZonesToggle == null || useBoostZonesToggle.isOn;
         RaceConfig.SaveLocalRecords = saveLocalRecordsToggle == null || saveLocalRecordsToggle.isOn;
-        // RaceConfig.PredictedLane은 BettingController 버튼 클릭 시 직접 설정됨(여기서 다시 읽지 않음)
+        // RaceConfig.SelectedAnimal / PredictedLane은 각 버튼 클릭 시 이미 저장돼 있음(여기서 다시 읽지 않음)
 
-        if (chooseAnimalMenu != null)
-        {
-            chooseAnimalMenu.SetActive(true);
-        }
-        else
-        {
-            BeginRace();
-        }
-    }
-
-    // 동물 선택 버튼(AnimalSelectController)에서 호출
-    public void OnAnimalConfirmed(int animalIndex)
-    {
-        RaceConfig.SelectedAnimal = (AnimalType)animalIndex;
         ApplySelectedAnimal();
 
-        if (chooseAnimalMenu != null)
-        {
-            chooseAnimalMenu.SetActive(false);
-        }
+        if (startMenu != null) startMenu.SetActive(false);
+
+        // 게임 화면 진입 — 순위 HUD 노출
+        if (rankingPanel != null) rankingPanel.SetActive(true);
+        if (liveRanking != null) liveRanking.gameObject.SetActive(true);
 
         BeginRace();
     }
 
-    // HorseOff에서 모든 참가 동물이 결승선을 통과하면 호출
+    // HorseOff에서 모든 참가 동물이 결승선을 통과하면 호출 — 게임 화면 → 종료 화면 전환
     public void OnRaceFinished()
     {
         if (liveRanking != null)
