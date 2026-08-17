@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,7 +33,7 @@ public class GameFlowController : MonoBehaviour
     // NextButton의 OnClick에 추가로 연결 (기존 StartMenu.SetActive(false) 호출은 유지)
     public void OnHorseCountConfirmed()
     {
-        Dropdown dropdown = horseNumberSelector.GetComponent<Dropdown>();
+        TMP_Dropdown dropdown = horseNumberSelector.GetComponent<TMP_Dropdown>();
         RaceConfig.SetHorseCountFromDropdown(dropdown.value);
         ApplyActiveLanes();
 
