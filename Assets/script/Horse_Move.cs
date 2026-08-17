@@ -27,6 +27,8 @@ public class Horse_Move : MonoBehaviour
     float speedMultiplier = 1f;
     float speedMultiplierEndTime = 0f;
 
+    public AudioClip fallSound; // 선택 사항 — 비워두면 재생 생략
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +63,11 @@ public class Horse_Move : MonoBehaviour
             if (die == fallCheckTarget)
             {
                 LiveOrDie = 1;
+
+                if (fallSound != null)
+                {
+                    AudioSource.PlayClipAtPoint(fallSound, transform.position);
+                }
             }
         }
 

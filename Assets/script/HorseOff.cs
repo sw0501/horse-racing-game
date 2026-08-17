@@ -17,6 +17,9 @@ public class HorseOff : MonoBehaviour
     public PhotoFinishController photoFinish;
     public float photoFinishThresholdSeconds = 0.3f;
 
+    // 순위별 팡파레 — index 0 = 1등, 1 = 2등 ... 순위가 배열 길이를 넘어가면 재생 생략(선택 사항)
+    public AudioClip[] rankFanfares;
+
     int cnt = 1;
     float firstFinishTime = -1f;
 
@@ -70,6 +73,12 @@ public class HorseOff : MonoBehaviour
         else if (collision.gameObject.tag == "5")
         {
             textMeshPro5.text = cnt.ToString();
+        }
+
+        int fanfareIndex = placement - 1;
+        if (rankFanfares != null && fanfareIndex >= 0 && fanfareIndex < rankFanfares.Length && rankFanfares[fanfareIndex] != null)
+        {
+            AudioSource.PlayClipAtPoint(rankFanfares[fanfareIndex], transform.position);
         }
 
         cnt++;

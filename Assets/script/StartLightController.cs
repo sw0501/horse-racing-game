@@ -7,6 +7,7 @@ public class StartLightController : MonoBehaviour
     public GameObject[] lights;
     public float intervalSeconds = 1f;
     public wait waitScript;
+    public AudioClip lightSound; // 선택 사항 — 점등마다 재생, 비워두면 생략
 
     public void BeginSequence()
     {
@@ -26,6 +27,12 @@ public class StartLightController : MonoBehaviour
             if (lights[i] == null) continue;
 
             lights[i].SetActive(true);
+
+            if (lightSound != null)
+            {
+                AudioSource.PlayClipAtPoint(lightSound, transform.position);
+            }
+
             yield return new WaitForSeconds(intervalSeconds);
 
             if (i < lights.Length - 1)
