@@ -21,9 +21,18 @@ public class GameFlowController : MonoBehaviour
     public Toggle useBoostZonesToggle;
     public Toggle saveLocalRecordsToggle;
 
+    // 오늘의 날씨 표시(선택 사항)
+    public TMP_Text weatherText;
+
     private void Awake()
     {
         RaceConfig.ResetToDefaults();
+        RaceConfig.CurrentWeather = (WeatherType)Random.Range(0, 3);
+
+        if (weatherText != null)
+        {
+            weatherText.text = "오늘의 날씨: " + RaceConfig.GetWeatherLabel();
+        }
 
         if (startMenu != null) startMenu.SetActive(true);
         if (chooseAnimalMenu != null) chooseAnimalMenu.SetActive(false);
@@ -40,6 +49,7 @@ public class GameFlowController : MonoBehaviour
         RaceConfig.UseAnimalStats = useAnimalStatsToggle == null || useAnimalStatsToggle.isOn;
         RaceConfig.UseBoostZones = useBoostZonesToggle == null || useBoostZonesToggle.isOn;
         RaceConfig.SaveLocalRecords = saveLocalRecordsToggle == null || saveLocalRecordsToggle.isOn;
+        // RaceConfig.PredictedLane은 BettingController 버튼 클릭 시 직접 설정됨(여기서 다시 읽지 않음)
 
         if (chooseAnimalMenu != null)
         {
@@ -125,6 +135,8 @@ public class GameFlowController : MonoBehaviour
 
     private void BeginRace()
     {
+        ApplyWeather();
+
         if (startLight != null)
         {
             startLight.BeginSequence();
@@ -132,6 +144,31 @@ public class GameFlowController : MonoBehaviour
         else
         {
             waitScript.BeginWait();
+        }
+    }
+
+    // 동물별 스탯 적용 이후, 실제 출발 직전에 날씨 효과를 곱연산으로 추가 적용
+    private void ApplyWeather()
+    {
+        if (RaceConfig.CurrentWeather == WeatherType.Normal) return;
+
+        for (int i = 1; i <= RaceConfig.HorseCount; i++)
+        {
+            GameObject horse = GameObject.Find(HorseNamePrefix + i);
+            if (horse == null) continue;
+
+            Horse_Move move = horse.GetComponent<Horse_Move>();
+            if (move == null) continue;
+
+            if (RaceConfig.CurrentWeather == WeatherType.Rainy)
+            {
+                move.minSpeed *= 0.8f;
+                move.maxSpeed *= 0.8f;
+            }
+            else if (RaceConfig.CurrentWeather == WeatherType.Sunny)
+            {
+                move.fallCheckRange = Mathf.RoundToInt(move.fallCheckRange * 1.5f);
+            }
         }
     }
 }

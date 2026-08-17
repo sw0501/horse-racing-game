@@ -6,6 +6,7 @@ public class EndMenuController : MonoBehaviour
 {
     public GameObject endMenu;
     public TMP_Text recordSummaryText; // 선택 사항 — 비워두면 표시 생략
+    public TMP_Text betResultText; // 선택 사항 — 비워두면 표시 생략
 
     public void ShowResults()
     {
@@ -19,6 +20,22 @@ public class EndMenuController : MonoBehaviour
             float bestTime = LocalRecordManager.GetBestFinishTime();
             string bestTimeText = bestTime >= 0f ? bestTime.ToString("F2") + "초" : "-";
             recordSummaryText.text = "누적 " + LocalRecordManager.GetTotalRaces() + "판 플레이 / 최고 기록 " + bestTimeText;
+        }
+
+        if (betResultText != null)
+        {
+            if (RaceConfig.PredictedLane <= 0)
+            {
+                betResultText.text = "";
+            }
+            else if (RaceConfig.PredictedLane == RaceConfig.LastWinningLane)
+            {
+                betResultText.text = "예측 적중! " + RaceConfig.PredictedLane + "번이 우승했습니다.";
+            }
+            else
+            {
+                betResultText.text = "예측 실패 — " + RaceConfig.PredictedLane + "번을 찍었지만 " + RaceConfig.LastWinningLane + "번이 우승했습니다.";
+            }
         }
     }
 

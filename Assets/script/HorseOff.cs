@@ -41,6 +41,7 @@ public class HorseOff : MonoBehaviour
 
             if (int.TryParse(collision.gameObject.tag, out int winningLane))
             {
+                RaceConfig.LastWinningLane = winningLane;
                 LocalRecordManager.RecordRaceResult(winningLane, Time.time - RaceConfig.RaceStartTime);
             }
         }
