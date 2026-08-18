@@ -15,7 +15,9 @@
 12. (2026-08-17) **모바일 빌드를 고려해 UI 전면 정리**: CanvasScaler를 Scale With Screen Size로 전환(세로 기준 고정), SafeAreaFitter.cs로 노치 대응, 각 화면에 반투명 배경 패널·제목 추가, 버튼/토글 터치 타겟 확대, 색상·타이포그래피 통일. 이 과정에서 버그 3건 발견·수정(CanvasScaler가 렌더링 직전마다 예전 좌표로 되돌리던 문제 → `CanvasRootPositionFix.cs`로 매 프레임 강제 고정, 신호등 패널이 처음부터 켜져 있어 다른 화면과 겹치던 문제, `EndMenu`가 배경 스프라이트용 700배 스케일 오브젝트라 그 자식 UI 좌표가 깨지던 문제 → 스케일 1의 별도 `EndMenuUI` 컨테이너로 분리). 시작 화면·동물 선택·결과 화면 전부 Play 모드 스크린샷으로 최종 확인.
 13. (2026-08-18) **메인 화면을 완전히 분리된 화면으로 재구성** — 사용자가 제시한 4단계 시나리오(①메인 화면 진입 ②메인에서 인원/옵션 선택 ③게임 시작 버튼으로 게임 화면 전환 ④종료 시 결과 화면→메인 복귀)에 맞춰, 기존에 별도 화면이었던 `ChooseName`(동물 선택)을 `StartMenu`에 병합해 "게임 시작" 버튼 하나로 인원·옵션·동물·베팅을 한번에 확정하도록 변경(`GameFlowController.OnGameStartClicked`, `AnimalSelectController`/`BettingController`는 화면 전환 없이 선택 상태만 저장하도록 단순화). 게임 화면에서만 보여야 하는 `Ranking` HUD를 메인 화면 단계에서는 숨기도록 `GameFlowController`에 필드 추가. **버그 발견·수정**: `StartMenu`/`EndMenuUI`의 RectTransform이 부모(`SafeArea`)에 꽉 차게 앵커링되지 않고 `100×100` 고정 크기로 남아있어, 그 안의 배경 이미지가 화면 전체가 아니라 중앙의 작은 사각형만 채우고 있었음(트랙이 배경 뒤로 비쳐 보이고 동물 버튼 위에 정체불명의 검은 상자가 보이던 원인). `anchorMin=(0,0)/anchorMax=(1,1)`로 고쳐서 해결. Play 모드에서 클릭 시뮬레이션으로 메인→게임→결과→메인 전체 흐름과 화면 전환 시점의 HUD 노출/숨김을 실시간 검증.
 
-**현재 상태 요약**: 등록된 이슈 17개 중 **16개 완료**(그중 #1~#6, #8~#15는 Play 모드 실시간 검증까지 끝남), **#7만 보류**(안전한 배경 레이어 없음). UI는 모바일 대응(반응형 스케일링, Safe Area, 터치 타겟 확대)까지 마친 상태. 메인 화면(날씨/인원/옵션/동물/베팅 선택 통합) → "게임 시작" → 게임 화면(신호등→경주, 실시간 HUD·부스트존·포토피니시 포함) → 결과 화면(베팅 적중 여부·로컬 기록 포함) → "처음으로"로 메인 복귀까지, 각 화면이 완전히 분리된 풀스크린으로 실제 동작함. ([이슈 목록](https://github.com/sw0501/horse-racing-game/issues))
+14. (2026-08-19) **모바일 게임 기준 UI 투박함 개선 7건 + 배경 패럴랙스(#7) 재시도**: 사용자가 "UI가 너무 투박하다"고 지적 → 화면을 분석해 이슈 #18~#24로 정리한 뒤 전부 구현. 라운드 코너 버튼/드롭다운/토글 스프라이트를 절차적으로 생성해 테마 통일(#18, #19), 메인 화면 섹션을 카드로 그룹핑(#20), 동물 선택 버튼에 실제 스프라이트 아이콘 추가(#21), 베팅 버튼 확대(#22), 게임 화면 HUD 카드 배경화(#23). **버그 발견·수정**: 결과 화면에서 `EndMenuUI`의 불투명 배경이 `Ranking` 패널보다 나중에 렌더링되어 순위가 완전히 가려져 있었음 — sibling 순서 수정 + 1등 강조 로직 추가(#24). #7(배경 패럴랙스)은 fal.ai/OpenRouter 키가 둘 다 미설정이라 절차적 코드로 하늘/언덕 아트를 직접 만들어 적용했으나, `Map`이 카메라 시야를 꽉 채우고 있어 레이스 중에는 대부분 가려지는 한계가 있음(트랙 아트 자체의 하늘 여백 설계 없이는 완전 해결 불가 — 이슈 코멘트에 기록). Play 모드에서 8개 항목 전부 스크린샷으로 검증 후 이슈 8건(#7, #18~#24) 전부 close.
+
+**현재 상태 요약**: 등록된 이슈 25개(#1~#24 + 재오픈 없음) **전부 완료**. 최근 폐쇄된 UI 폴리싱 이슈(#18~#24)를 포함해 GitHub에 열린 이슈 없음. UI는 모바일 대응(반응형 스케일링, Safe Area, 터치 타겟 확대)에 이어 라운드 버튼·카드형 레이아웃·동물 아이콘까지 마친 상태. 메인 화면(날씨/인원/옵션/동물/베팅 선택 통합) → "게임 시작" → 게임 화면(신호등→경주, 실시간 HUD·부스트존·포토피니시·패럴랙스 배경 포함) → 결과 화면(순위 강조·베팅 적중 여부·로컬 기록 포함) → "처음으로"로 메인 복귀까지, 각 화면이 완전히 분리된 풀스크린으로 실제 동작함. ([이슈 목록](https://github.com/sw0501/horse-racing-game/issues))
 
 ### 등록된 이슈
 
@@ -46,14 +48,15 @@
 - [x] [#16 스텁 스크립트(HorseRemoveLine, test) 정리](https://github.com/sw0501/horse-racing-game/issues/16) — closed. 미참조 확인 후 삭제.
 - [x] [#17 레포/빌드 관리 프로세스 정리](https://github.com/sw0501/horse-racing-game/issues/17) — closed. build.zip 추적 중단(과거 히스토리는 유지), CI는 라이선스 시크릿 필요해 보류 결정.
 
-**UI 폴리싱 (모바일 게임 기준 투박함 개선)** — 🆕 이슈만 등록, 미착수
-- [ ] [#18 드롭다운/토글이 기본 Unity 스킨 그대로라 테마와 이질적](https://github.com/sw0501/horse-racing-game/issues/18)
-- [ ] [#19 버튼이 flat 단색 사각형이라 눌리는 느낌/깊이감이 없음](https://github.com/sw0501/horse-racing-game/issues/19)
-- [ ] [#20 메인 화면이 세로로 긴 옵션 나열식이라 정보 밀도가 높고 산만함](https://github.com/sw0501/horse-racing-game/issues/20)
-- [ ] [#21 동물 선택 버튼에 텍스트만 있고 아이콘/썸네일이 없음](https://github.com/sw0501/horse-racing-game/issues/21)
-- [ ] [#22 베팅(우승 예측) 버튼 6개가 한 줄에 빽빽해 터치 타겟이 작음](https://github.com/sw0501/horse-racing-game/issues/22)
-- [ ] [#23 게임 화면 HUD(순위 패널)가 배경/아이콘 없이 밋밋함](https://github.com/sw0501/horse-racing-game/issues/23)
-- [ ] [#24 결과 화면에 순위/우승자를 강조하는 연출이 없어 임팩트가 약함](https://github.com/sw0501/horse-racing-game/issues/24)
+**UI 폴리싱 (모바일 게임 기준 투박함 개선)** — ✅ 완료 (2026-08-19, 커밋 2e21f72)
+- [x] [#18 드롭다운/토글이 기본 Unity 스킨 그대로라 테마와 이질적](https://github.com/sw0501/horse-racing-game/issues/18) — closed. 라운드 코너 스프라이트 + 테마 색상(다크 브라운/골드/크림)으로 재스타일링, 드롭다운 높이 30→44 확대.
+- [x] [#19 버튼이 flat 단색 사각형이라 눌리는 느낌/깊이감이 없음](https://github.com/sw0501/horse-racing-game/issues/19) — closed. `Assets/UI/ButtonRounded.png`(절차적 생성) 적용 + Shadow 컴포넌트로 깊이감 추가.
+- [x] [#20 메인 화면이 세로로 긴 옵션 나열식이라 정보 밀도가 높고 산만함](https://github.com/sw0501/horse-racing-game/issues/20) — closed. 옵션/동물선택/베팅 섹션을 라운드 카드 배경(Card_Options/Card_Animal/Card_Bet)으로 그룹핑.
+- [x] [#21 동물 선택 버튼에 텍스트만 있고 아이콘/썸네일이 없음](https://github.com/sw0501/horse-racing-game/issues/21) — closed. 각 동물의 Run 스프라이트 프레임을 버튼 아이콘으로 추가.
+- [x] [#22 베팅(우승 예측) 버튼 6개가 한 줄에 빽빽해 터치 타겟이 작음](https://github.com/sw0501/horse-racing-game/issues/22) — closed. 버튼 폭 88→150px 확대(가로 여유 공간 활용, 한 줄 유지).
+- [x] [#23 게임 화면 HUD(순위 패널)가 배경/아이콘 없이 밋밋함](https://github.com/sw0501/horse-racing-game/issues/23) — closed. HUD 배경을 라운드 카드로 교체, "출발 대기 중..." 플레이스홀더 텍스트 추가.
+- [x] [#24 결과 화면에 순위/우승자를 강조하는 연출이 없어 임팩트가 약함](https://github.com/sw0501/horse-racing-game/issues/24) — closed. **근본 원인 발견**: EndMenuUI의 불투명 배경이 Ranking 패널보다 나중에 렌더링돼 결과 화면에서 순위가 완전히 가려져 있었음(단순 "강조 부족"이 아니었음) — sibling 순서를 고쳐 Ranking이 항상 최상단에 보이도록 수정하고, 1등 레인 텍스트를 금색·굵게 강조.
+- [x] [#7 배경 패럴랙스 레이어 배치](https://github.com/sw0501/horse-racing-game/issues/7) — closed. fal.ai/OpenRouter 키 모두 미설정이라 절차적으로(Texture2D 코드) 하늘+언덕 실루엣 배경 아트를 직접 생성해 `Backgorund_Move.cs` 부착. **단, `Map`이 카메라 세로 시야를 펜스까지 꽉 채우도록 만들어져 있어 레이스 중에는 대부분 가려지고 출발선 진입 전 가장자리에서만 살짝 보임** — 완전히 눈에 띄려면 트랙 아트 자체에 하늘 여백 설계가 추가로 필요.
 
 ## 완료된 기능 (기존)
 
