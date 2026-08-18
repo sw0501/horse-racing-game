@@ -18,6 +18,11 @@ public class LiveRankingController : MonoBehaviour
     private void Start()
     {
         CacheHorses();
+
+        if (liveRankingText != null)
+        {
+            liveRankingText.text = "출발 대기 중...";
+        }
     }
 
     private void Update()
