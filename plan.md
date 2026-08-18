@@ -46,6 +46,15 @@
 - [x] [#16 스텁 스크립트(HorseRemoveLine, test) 정리](https://github.com/sw0501/horse-racing-game/issues/16) — closed. 미참조 확인 후 삭제.
 - [x] [#17 레포/빌드 관리 프로세스 정리](https://github.com/sw0501/horse-racing-game/issues/17) — closed. build.zip 추적 중단(과거 히스토리는 유지), CI는 라이선스 시크릿 필요해 보류 결정.
 
+**UI 폴리싱 (모바일 게임 기준 투박함 개선)** — 🆕 이슈만 등록, 미착수
+- [ ] [#18 드롭다운/토글이 기본 Unity 스킨 그대로라 테마와 이질적](https://github.com/sw0501/horse-racing-game/issues/18)
+- [ ] [#19 버튼이 flat 단색 사각형이라 눌리는 느낌/깊이감이 없음](https://github.com/sw0501/horse-racing-game/issues/19)
+- [ ] [#20 메인 화면이 세로로 긴 옵션 나열식이라 정보 밀도가 높고 산만함](https://github.com/sw0501/horse-racing-game/issues/20)
+- [ ] [#21 동물 선택 버튼에 텍스트만 있고 아이콘/썸네일이 없음](https://github.com/sw0501/horse-racing-game/issues/21)
+- [ ] [#22 베팅(우승 예측) 버튼 6개가 한 줄에 빽빽해 터치 타겟이 작음](https://github.com/sw0501/horse-racing-game/issues/22)
+- [ ] [#23 게임 화면 HUD(순위 패널)가 배경/아이콘 없이 밋밋함](https://github.com/sw0501/horse-racing-game/issues/23)
+- [ ] [#24 결과 화면에 순위/우승자를 강조하는 연출이 없어 임팩트가 약함](https://github.com/sw0501/horse-racing-game/issues/24)
+
 ## 완료된 기능 (기존)
 
 README에 명시된 3가지 핵심 기능:
