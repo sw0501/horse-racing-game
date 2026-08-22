@@ -16,6 +16,8 @@ public class BettingController : MonoBehaviour
     // 색상 외 신호 — 선택된 버튼만 살짝 키운다
     public float selectedScale = 1.08f;
 
+    private const int MaxLaneButtons = RaceConfig.MaxHorseCount;
+
     // 인덱스 = buttonImages와 동일(0=안함, 1~5=레인). 각 레인에 배정된 동물과 배당률을 표시한다.
     public TMP_Text[] buttonLabels;
     // 현재 보유 포인트 표시(선택 사항)
@@ -26,22 +28,37 @@ public class BettingController : MonoBehaviour
         RefreshLaneInfo();
     }
 
-    // 레인별 동물/배당률은 판마다 바뀌므로 런타임에 버튼 라벨을 다시 쓴다(#28, #29)
+    // 레인별 동물/배당률은 판마다, 참가 마릿수는 드롭다운 변경마다 바뀌므로
+    // 런타임에 버튼 라벨과 활성 상태를 다시 쓴다(#28, #29)
     public void RefreshLaneInfo()
     {
-        if (buttonLabels != null)
+        // 참가하지 않는 레인에 걸어둔 예측은 무효 — 되돌린다
+        if (RaceConfig.PredictedLane > RaceConfig.HorseCount)
         {
-            for (int lane = 1; lane < buttonLabels.Length && lane <= RaceConfig.HorseCount; lane++)
-            {
-                if (buttonLabels[lane] == null) continue;
+            RaceConfig.PredictedLane = 0;
+        }
 
-                buttonLabels[lane].text = lane + "번\n"
-                    + RaceConfig.GetAnimalName(RaceConfig.LaneAnimals[lane])
-                    + "\n×" + RaceConfig.GetOdds(lane).ToString("0.0");
+        for (int lane = 1; lane <= MaxLaneButtons; lane++)
+        {
+            bool racing = lane <= RaceConfig.HorseCount;
+
+            if (buttonLabels != null && lane < buttonLabels.Length && buttonLabels[lane] != null)
+            {
+                buttonLabels[lane].text = racing
+                    ? lane + "번\n" + RaceConfig.GetAnimalName(RaceConfig.LaneAnimals[lane])
+                      + "\n×" + RaceConfig.GetOdds(lane).ToString("0.0")
+                    : lane + "번\n미출전";
+            }
+
+            // 참가하지 않는 레인 버튼은 눌리지 않게 하고 흐리게 표시한다
+            if (buttonImages != null && lane < buttonImages.Length && buttonImages[lane] != null)
+            {
+                Button button = buttonImages[lane].GetComponent<Button>();
+                if (button != null) button.interactable = racing;
             }
         }
 
-        UpdatePointsLabel();
+        UpdateHighlight();
     }
 
     private void UpdatePointsLabel()

@@ -61,10 +61,11 @@ public class EndMenuController : MonoBehaviour
         {
             RaceConfig.LastPayout = 0;
             string lost = RaceConfig.BetAmount > 0 ? " −" + RaceConfig.BetAmount + "P" : "";
-            return "예측 실패 — " + laneDesc + "을 찍었지만 "
-                + RaceConfig.LastWinningLane + "번 "
-                + RaceConfig.GetAnimalName(RaceConfig.LaneAnimals[RaceConfig.LastWinningLane])
-                + "이 우승했습니다." + lost
+            string winner = RaceConfig.LastWinningLane + "번 "
+                + RaceConfig.GetAnimalName(RaceConfig.LaneAnimals[RaceConfig.LastWinningLane]);
+
+            return "예측 실패 — " + laneDesc + " 예측, "
+                + RaceConfig.WithSubjectParticle(winner) + " 우승했습니다." + lost
                 + "\n보유 " + LocalRecordManager.GetPoints() + "P";
         }
 

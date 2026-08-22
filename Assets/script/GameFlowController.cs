@@ -30,6 +30,11 @@ public class GameFlowController : MonoBehaviour
         RaceConfig.ResetToDefaults();
         RaceConfig.CurrentWeather = (WeatherType)Random.Range(0, 3);
 
+        // 드롭다운은 값이 "바뀔 때만" ChangeHorseNum을 호출하므로, 시작 시점에는
+        // 화면에 보이는 값(기본 2마리)과 RaceConfig.HorseCount(기본 5)가 어긋난다.
+        // 베팅 UI가 참가하지도 않을 레인을 보여주지 않도록 여기서 먼저 맞춘다.
+        SyncHorseCountFromDropdown();
+
         // 베팅 전에 정해져야 판단 근거가 되므로 여기서 배정한다(#28)
         RaceConfig.AssignRandomLaneAnimals();
         LocalRecordManager.RefillPointsIfEmpty();
@@ -49,10 +54,19 @@ public class GameFlowController : MonoBehaviour
 
     // 메인 화면의 "게임 시작" 버튼 OnClick에 연결 — 마릿수/옵션/동물/베팅 선택을 전부 확정하고
     // 메인 화면 → 게임 화면으로 전환
+    private void SyncHorseCountFromDropdown()
+    {
+        if (horseNumberSelector == null) return;
+
+        TMP_Dropdown dropdown = horseNumberSelector.GetComponent<TMP_Dropdown>();
+        if (dropdown == null) return;
+
+        RaceConfig.SetHorseCountFromDropdown(dropdown.value);
+    }
+
     public void OnGameStartClicked()
     {
-        TMP_Dropdown dropdown = horseNumberSelector.GetComponent<TMP_Dropdown>();
-        RaceConfig.SetHorseCountFromDropdown(dropdown.value);
+        SyncHorseCountFromDropdown();
         ApplyActiveLanes();
 
         RaceConfig.UseAnimalStats = useAnimalStatsToggle == null || useAnimalStatsToggle.isOn;
