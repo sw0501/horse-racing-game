@@ -21891,6 +21891,9 @@ MonoBehaviour:
   - {fileID: 2219868}
   normalColor: {r: 0.55, g: 0.38, b: 0.18, a: 1}
   selectedColor: {r: 0.85, g: 0.65, b: 0.25, a: 1}
+  selectionLabel: {fileID: 226080336}
+  labelPrefix: "\uC6B0\uC2B9 \uC608\uCE21"
+  selectedScale: 1.08
 --- !u!114 &952569600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21912,6 +21915,9 @@ MonoBehaviour:
   - {fileID: 1848092219}
   normalColor: {r: 0.55, g: 0.38, b: 0.18, a: 1}
   selectedColor: {r: 0.85, g: 0.65, b: 0.25, a: 1}
+  selectionLabel: {fileID: 1500454075}
+  labelPrefix: "\uB3D9\uBB3C \uC120\uD0DD"
+  selectedScale: 1.08
 --- !u!1 &953107107
 GameObject:
   m_ObjectHideFlags: 0
