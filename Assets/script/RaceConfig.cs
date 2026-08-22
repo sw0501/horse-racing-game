@@ -31,6 +31,7 @@ public static class RaceConfig
     public static bool UseAnimalStats = true;
     public static bool UseBoostZones = true;
     public static bool SaveLocalRecords = true;
+    public static bool UseFallRecovery = true;
 
     // 베팅(예측) 시스템 — 0이면 예측 안 함
     public static int PredictedLane;
@@ -47,6 +48,7 @@ public static class RaceConfig
         UseAnimalStats = true;
         UseBoostZones = true;
         SaveLocalRecords = true;
+        UseFallRecovery = true;
         PredictedLane = 0;
         LastWinningLane = 0;
         RaceStartTime = 0f;

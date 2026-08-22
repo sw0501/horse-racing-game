@@ -1,15 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 public class wait : MonoBehaviour
 {
-    public GameObject h1;
-    public GameObject h2;
-    public GameObject h3;
-    public GameObject h4;
-    public GameObject h5;
+    private const string HorseNamePrefix = "horse_";
+
     public GameObject poppy;
 
     public float startDelaySeconds = 4.5f;
@@ -31,19 +27,38 @@ public class wait : MonoBehaviour
 
         RaceConfig.RaceStartTime = Time.time;
 
-        h1.GetComponent<Animator>().enabled = true;
-        h1.GetComponent<Horse_Move>().enabled = true;
-        h2.GetComponent<Animator>().enabled = true;
-        h2.GetComponent<Horse_Move>().enabled = true;
-        h3.GetComponent<Animator>().enabled = true;
-        h3.GetComponent<Horse_Move>().enabled = true;
-        h4.GetComponent<Animator>().enabled = true;
-        h4.GetComponent<Horse_Move>().enabled = true;
-        h5.GetComponent<Animator>().enabled = true;
-        h5.GetComponent<Horse_Move>().enabled = true;
-        poppy.SetActive(true);
-        this.gameObject.SetActive(false);
+        StartActiveHorses();
 
+        if (poppy != null)
+        {
+            poppy.SetActive(true);
+        }
+
+        this.gameObject.SetActive(false);
     }
 
+    // 참가 중인 레인의 Animator/Horse_Move를 켜서 실제 출발시킨다.
+    // GameFlowController/CameraMove/LiveRankingController와 동일한 조회 방식을 쓴다.
+    // (GameObject.Find는 비활성 오브젝트를 찾지 못하므로, GameFlowController.ApplyActiveLanes가
+    //  이미 꺼둔 미참가 레인은 여기서 자연스럽게 제외된다)
+    private void StartActiveHorses()
+    {
+        for (int i = 1; i <= RaceConfig.HorseCount; i++)
+        {
+            GameObject horse = GameObject.Find(HorseNamePrefix + i);
+            if (horse == null) continue;
+
+            Animator animator = horse.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.enabled = true;
+            }
+
+            Horse_Move move = horse.GetComponent<Horse_Move>();
+            if (move != null)
+            {
+                move.enabled = true;
+            }
+        }
+    }
 }
