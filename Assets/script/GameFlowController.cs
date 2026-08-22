@@ -30,6 +30,10 @@ public class GameFlowController : MonoBehaviour
         RaceConfig.ResetToDefaults();
         RaceConfig.CurrentWeather = (WeatherType)Random.Range(0, 3);
 
+        // 베팅 전에 정해져야 판단 근거가 되므로 여기서 배정한다(#28)
+        RaceConfig.AssignRandomLaneAnimals();
+        LocalRecordManager.RefillPointsIfEmpty();
+
         if (weatherText != null)
         {
             weatherText.text = "오늘의 날씨: " + RaceConfig.GetWeatherLabel();
@@ -56,7 +60,19 @@ public class GameFlowController : MonoBehaviour
         RaceConfig.SaveLocalRecords = saveLocalRecordsToggle == null || saveLocalRecordsToggle.isOn;
         // RaceConfig.SelectedAnimal / PredictedLane은 각 버튼 클릭 시 이미 저장돼 있음(여기서 다시 읽지 않음)
 
-        ApplySelectedAnimal();
+        ApplyLaneAnimals();
+
+        // 예측한 레인이 있으면 포인트를 건다(#29). 잔고에서 즉시 차감하고,
+        // 적중 시 EndMenuController가 배당률만큼 지급한다.
+        if (RaceConfig.PredictedLane > 0 && LocalRecordManager.GetPoints() >= RaceConfig.DefaultBetAmount)
+        {
+            RaceConfig.BetAmount = RaceConfig.DefaultBetAmount;
+            LocalRecordManager.AddPoints(-RaceConfig.BetAmount);
+        }
+        else
+        {
+            RaceConfig.BetAmount = 0;
+        }
 
         if (startMenu != null) startMenu.SetActive(false);
 
@@ -99,19 +115,20 @@ public class GameFlowController : MonoBehaviour
 
     private const int BaseFallCheckRange = 50000;
 
-    private void ApplySelectedAnimal()
+    // 레인마다 서로 다른 동물이 배정되므로(#28), 레인별로 각자의 스탯/외형을 적용한다.
+    private void ApplyLaneAnimals()
     {
-        AnimalStats.Stats stats = AnimalStats.Get(RaceConfig.SelectedAnimal);
-
         for (int i = 1; i <= RaceConfig.HorseCount; i++)
         {
             GameObject horse = GameObject.Find(HorseNamePrefix + i);
             if (horse == null) continue;
 
+            AnimalType animal = RaceConfig.LaneAnimals[i];
+
             AnimalVisual visual = horse.GetComponent<AnimalVisual>();
             if (visual != null)
             {
-                visual.Apply(RaceConfig.SelectedAnimal);
+                visual.Apply(animal);
             }
 
             if (!RaceConfig.UseAnimalStats) continue;
@@ -119,6 +136,7 @@ public class GameFlowController : MonoBehaviour
             Horse_Move move = horse.GetComponent<Horse_Move>();
             if (move == null) continue;
 
+            AnimalStats.Stats stats = AnimalStats.Get(animal);
             move.minSpeed = stats.minSpeed;
             move.maxSpeed = stats.maxSpeed;
             move.fallCheckRange = Mathf.Max(move.fallCheckTarget + 1, Mathf.RoundToInt(BaseFallCheckRange / stats.fallRiskMultiplier));

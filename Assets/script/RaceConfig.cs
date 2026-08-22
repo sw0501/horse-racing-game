@@ -27,6 +27,83 @@ public static class RaceConfig
     public static AnimalType SelectedAnimal = AnimalType.Horse;
     public static WeatherType CurrentWeather = WeatherType.Normal;
 
+    // 레인별 동물 종. 인덱스 = 레인 번호(1~5), 0번은 쓰지 않는다.
+    // 베팅 전에 정해져야 정보로서 의미가 있으므로 GameFlowController.Awake()에서 배정한다.
+    public static AnimalType[] LaneAnimals = new AnimalType[MaxHorseCount + 1];
+
+    // Fox/Rabbit은 Animator Controller가 없어 실제로 배정 가능한 종은 이 5가지뿐
+    public static readonly AnimalType[] SelectableAnimals =
+    {
+        AnimalType.Horse, AnimalType.Bear, AnimalType.Boar, AnimalType.Deer, AnimalType.Wolf
+    };
+
+    private static readonly string[] AnimalNames = { "말", "곰", "멧돼지", "사슴", "여우", "늑대", "토끼" };
+
+    public static string GetAnimalName(AnimalType type)
+    {
+        int i = (int)type;
+        return (i >= 0 && i < AnimalNames.Length) ? AnimalNames[i] : "-";
+    }
+
+    // 레인마다 서로 다른 종을 무작위 배정(Fisher-Yates). 레인 수가 종 수보다 많을 일은 없다.
+    public static void AssignRandomLaneAnimals()
+    {
+        AnimalType[] pool = (AnimalType[])SelectableAnimals.Clone();
+        for (int i = pool.Length - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            AnimalType tmp = pool[i];
+            pool[i] = pool[j];
+            pool[j] = tmp;
+        }
+
+        for (int lane = 1; lane <= MaxHorseCount; lane++)
+        {
+            LaneAnimals[lane] = pool[(lane - 1) % pool.Length];
+        }
+    }
+
+    // 해당 종이 배정된 레인 번호. 없으면 0.
+    public static int GetLaneOf(AnimalType type)
+    {
+        for (int lane = 1; lane <= HorseCount; lane++)
+        {
+            if (LaneAnimals[lane] == type) return lane;
+        }
+
+        return 0;
+    }
+
+    // 하우스 마진 — 1보다 작을수록 지급이 짜다
+    private const float PayoutMargin = 0.85f;
+
+    // 레인의 "강함" — 빠를수록, 덜 넘어질수록 크다
+    private static float GetStrength(int lane)
+    {
+        AnimalStats.Stats s = AnimalStats.Get(LaneAnimals[lane]);
+        float avgSpeed = (s.minSpeed + s.maxSpeed) * 0.5f;
+        return avgSpeed / Mathf.Max(0.1f, s.fallRiskMultiplier);
+    }
+
+    // 배당률 — 참가 레인 전체 강함의 합을 해당 레인의 강함으로 나눈 역비례 값.
+    // 이러면 강한 레인일수록 배당이 낮아지고, 참가 마릿수에 따라 기준치도 자연히 따라간다.
+    public static float GetOdds(int lane)
+    {
+        if (lane < 1 || lane > HorseCount) return 0f;
+
+        float total = 0f;
+        for (int i = 1; i <= HorseCount; i++)
+        {
+            total += GetStrength(i);
+        }
+
+        float mine = GetStrength(lane);
+        if (mine <= 0f || total <= 0f) return 0f;
+
+        float odds = (total / mine) * PayoutMargin;
+        return Mathf.Round(Mathf.Clamp(odds, 1.1f, 20f) * 10f) / 10f;
+    }
+
     // 게임 시작 화면에서 켜고 끌 수 있는 기능들 (기본값 true = 전부 켜짐)
     public static bool UseAnimalStats = true;
     public static bool UseBoostZones = true;
@@ -36,6 +113,12 @@ public static class RaceConfig
     // 베팅(예측) 시스템 — 0이면 예측 안 함
     public static int PredictedLane;
     public static int LastWinningLane;
+
+    // 이번 판에 건 포인트와 그 결과 수령액(결과 화면 표시용).
+    // 잔고 자체는 판을 넘어 유지되어야 하므로 여기가 아니라 LocalRecordManager(PlayerPrefs)에 둔다.
+    public static int BetAmount;
+    public static int LastPayout;
+    public const int DefaultBetAmount = 100;
 
     // wait.cs가 실제로 말을 움직이기 시작하는 시점에 기록 (완주 기록 계산용)
     public static float RaceStartTime;
@@ -52,6 +135,8 @@ public static class RaceConfig
         PredictedLane = 0;
         LastWinningLane = 0;
         RaceStartTime = 0f;
+        BetAmount = 0;
+        LastPayout = 0;
     }
 
     public static void SetHorseCountFromDropdown(int dropdownValue)
