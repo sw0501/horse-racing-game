@@ -4771,7 +4771,11 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
-  fallSound: {fileID: 0}
+  fallSound: {fileID: 8300000, guid: 7130935276ed6483da58e8002a40007b, type: 3}
+  fallRecoveryDelaySeconds: 2
+  fallRecoveryChance: 0.35
+  fallRecoverySpeedMultiplier: 0.7
+  fallRecoverySlowSeconds: 2
 --- !u!61 &196394008
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11977,7 +11981,7 @@ MonoBehaviour:
   - {fileID: 1381936497}
   intervalSeconds: 1
   waitScript: {fileID: 741748093}
-  lightSound: {fileID: 0}
+  lightSound: {fileID: 8300000, guid: ce258965bbec04fcfb18400fffcfa222, type: 3}
 --- !u!1 &486619631
 GameObject:
   m_ObjectHideFlags: 0
@@ -34824,7 +34828,11 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
-  fallSound: {fileID: 0}
+  fallSound: {fileID: 8300000, guid: 7130935276ed6483da58e8002a40007b, type: 3}
+  fallRecoveryDelaySeconds: 2
+  fallRecoveryChance: 0.35
+  fallRecoverySpeedMultiplier: 0.7
+  fallRecoverySlowSeconds: 2
 --- !u!61 &1546714314
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -35217,7 +35225,11 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
-  fallSound: {fileID: 0}
+  fallSound: {fileID: 8300000, guid: 7130935276ed6483da58e8002a40007b, type: 3}
+  fallRecoveryDelaySeconds: 2
+  fallRecoveryChance: 0.35
+  fallRecoverySpeedMultiplier: 0.7
+  fallRecoverySlowSeconds: 2
 --- !u!61 &1564187900
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -39070,7 +39082,11 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
-  fallSound: {fileID: 0}
+  fallSound: {fileID: 8300000, guid: 7130935276ed6483da58e8002a40007b, type: 3}
+  fallRecoveryDelaySeconds: 2
+  fallRecoveryChance: 0.35
+  fallRecoverySpeedMultiplier: 0.7
+  fallRecoverySlowSeconds: 2
 --- !u!61 &1700399713
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -40548,7 +40564,11 @@ MonoBehaviour:
   maxSpeed: 0.2
   fallCheckRange: 50000
   fallCheckTarget: 44
-  fallSound: {fileID: 0}
+  fallSound: {fileID: 8300000, guid: 7130935276ed6483da58e8002a40007b, type: 3}
+  fallRecoveryDelaySeconds: 2
+  fallRecoveryChance: 0.35
+  fallRecoverySpeedMultiplier: 0.7
+  fallRecoverySlowSeconds: 2
 --- !u!61 &1758016041
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -43057,7 +43077,12 @@ MonoBehaviour:
   gameFlow: {fileID: 577413738}
   photoFinish: {fileID: 1256500997}
   photoFinishThresholdSeconds: 0.3
-  rankFanfares: []
+  rankFanfares:
+  - {fileID: 8300000, guid: ddb0b9c1ad88a4c90b1d7c23b6bcb6f5, type: 3}
+  - {fileID: 8300000, guid: cab318a5344f74b77a4d6a0522cbe5c8, type: 3}
+  - {fileID: 8300000, guid: cab318a5344f74b77a4d6a0522cbe5c8, type: 3}
+  - {fileID: 8300000, guid: cab318a5344f74b77a4d6a0522cbe5c8, type: 3}
+  - {fileID: 8300000, guid: cab318a5344f74b77a4d6a0522cbe5c8, type: 3}
 --- !u!50 &1829593453
 Rigidbody2D:
   serializedVersion: 5
