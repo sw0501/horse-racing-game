@@ -36,18 +36,7 @@ public class EndMenuController : MonoBehaviour
 
         if (betResultText != null)
         {
-            if (RaceConfig.PredictedLane <= 0)
-            {
-                betResultText.text = "";
-            }
-            else if (RaceConfig.PredictedLane == RaceConfig.LastWinningLane)
-            {
-                betResultText.text = "예측 적중! " + RaceConfig.PredictedLane + "번이 우승했습니다.";
-            }
-            else
-            {
-                betResultText.text = "예측 실패 — " + RaceConfig.PredictedLane + "번을 찍었지만 " + RaceConfig.LastWinningLane + "번이 우승했습니다.";
-            }
+            betResultText.text = BuildBetResult();
         }
     }
 
@@ -55,6 +44,41 @@ public class EndMenuController : MonoBehaviour
     public void ReturnToStart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // 베팅 결과 + 포인트 정산(#29). 건 포인트는 이미 시작 시 차감됐으므로 적중 시에만 지급한다.
+    private string BuildBetResult()
+    {
+        int lane = RaceConfig.PredictedLane;
+        if (lane <= 0)
+        {
+            return "예측을 하지 않았습니다. (보유 " + LocalRecordManager.GetPoints() + "P)";
+        }
+
+        string laneDesc = lane + "번 " + RaceConfig.GetAnimalName(RaceConfig.LaneAnimals[lane]);
+
+        if (lane != RaceConfig.LastWinningLane)
+        {
+            RaceConfig.LastPayout = 0;
+            string lost = RaceConfig.BetAmount > 0 ? " −" + RaceConfig.BetAmount + "P" : "";
+            return "예측 실패 — " + laneDesc + "을 찍었지만 "
+                + RaceConfig.LastWinningLane + "번 "
+                + RaceConfig.GetAnimalName(RaceConfig.LaneAnimals[RaceConfig.LastWinningLane])
+                + "이 우승했습니다." + lost
+                + "\n보유 " + LocalRecordManager.GetPoints() + "P";
+        }
+
+        float odds = RaceConfig.GetOdds(lane);
+        RaceConfig.LastPayout = Mathf.RoundToInt(RaceConfig.BetAmount * odds);
+
+        if (RaceConfig.LastPayout > 0)
+        {
+            LocalRecordManager.AddPoints(RaceConfig.LastPayout);
+        }
+
+        return "예측 적중! " + laneDesc + " 우승 (×" + odds.ToString("0.0") + ")"
+            + (RaceConfig.LastPayout > 0 ? "  +" + RaceConfig.LastPayout + "P" : "")
+            + "\n보유 " + LocalRecordManager.GetPoints() + "P";
     }
 
     // 1등으로 완주한 레인의 순위 텍스트("1")를 금색·큰 글씨로 강조, 나머지는 기본색으로 되돌림

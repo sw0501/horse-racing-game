@@ -47,6 +47,11 @@ public class CameraMove : MonoBehaviour
             Horse_Move move = cachedHorses[i];
             if (move == null) continue;
 
+            // 완주한 말은 HorseOff가 GameObject를 통째로 비활성화한다. 컴포넌트 참조 자체는
+            // 살아있어 null 체크만으로는 걸러지지 않으므로, 완주 직전의 마지막 속도가 평균에
+            // 계속 섞이지 않도록 활성 상태를 함께 확인한다.
+            if (!move.gameObject.activeInHierarchy) continue;
+
             total += move.HorseSpeed;
             count++;
         }
