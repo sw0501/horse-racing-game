@@ -7,5 +7,12 @@ public class Select_Horse_Number : MonoBehaviour
     public void ChangeHorseNum()
     {
         RaceConfig.SetHorseCountFromDropdown(this.GetComponent<TMP_Dropdown>().value);
+
+        // 참가 레인이 바뀌면 베팅 버튼의 출전/미출전 표시도 따라가야 한다
+        BettingController betting = FindFirstObjectByType<BettingController>(FindObjectsInactive.Include);
+        if (betting != null)
+        {
+            betting.RefreshLaneInfo();
+        }
     }
 }

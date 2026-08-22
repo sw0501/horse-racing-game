@@ -45,6 +45,19 @@ public static class RaceConfig
         return (i >= 0 && i < AnimalNames.Length) ? AnimalNames[i] : "-";
     }
 
+    // 한글 받침 유무에 따라 주격 조사를 붙인다("늑대가" / "곰이").
+    // 한글 음절은 U+AC00부터 28개 종성 주기로 배열되므로 나머지가 0이면 받침이 없다.
+    public static string WithSubjectParticle(string word)
+    {
+        if (string.IsNullOrEmpty(word)) return word;
+
+        char last = word[word.Length - 1];
+        if (last < 0xAC00 || last > 0xD7A3) return word + "이";
+
+        bool hasFinalConsonant = ((last - 0xAC00) % 28) != 0;
+        return word + (hasFinalConsonant ? "이" : "가");
+    }
+
     // 레인마다 서로 다른 종을 무작위 배정(Fisher-Yates). 레인 수가 종 수보다 많을 일은 없다.
     public static void AssignRandomLaneAnimals()
     {
