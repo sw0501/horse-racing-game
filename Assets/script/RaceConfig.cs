@@ -133,6 +133,12 @@ public static class RaceConfig
     public static int LastPayout;
     public const int DefaultBetAmount = 100;
 
+    // 고를 수 있는 판돈. 인덱스가 곧 버튼 순서다.
+    public static readonly int[] BetAmountOptions = { 100, 500, 1000 };
+
+    // 플레이어가 고른 판돈(잔고가 모자라면 GameFlowController가 낮춰 잡는다)
+    public static int SelectedBetAmount = DefaultBetAmount;
+
     // wait.cs가 실제로 말을 움직이기 시작하는 시점에 기록 (완주 기록 계산용)
     public static float RaceStartTime;
 
@@ -150,6 +156,7 @@ public static class RaceConfig
         RaceStartTime = 0f;
         BetAmount = 0;
         LastPayout = 0;
+        SelectedBetAmount = DefaultBetAmount;
     }
 
     public static void SetHorseCountFromDropdown(int dropdownValue)

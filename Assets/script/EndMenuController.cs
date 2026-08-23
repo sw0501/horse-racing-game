@@ -91,7 +91,9 @@ public class EndMenuController : MonoBehaviour
         {
             if (rankText == null) continue;
 
-            bool isWinner = rankText.text == "1";
+            // HorseOff가 "1 <size=55%>사슴</size>" 형태로 쓰므로 앞쪽 등수 토큰만 본다
+            string placement = rankText.text.Split(' ')[0];
+            bool isWinner = placement == "1";
             rankText.color = isWinner ? winnerColor : normalRankColor;
             rankText.fontStyle = isWinner ? FontStyles.Bold : FontStyles.Normal;
         }

@@ -21,6 +21,7 @@ public class GameFlowController : MonoBehaviour
     public Toggle useAnimalStatsToggle;
     public Toggle useBoostZonesToggle;
     public Toggle saveLocalRecordsToggle;
+    public Toggle useFallRecoveryToggle;
 
     // 오늘의 날씨 표시(선택 사항)
     public TMP_Text weatherText;
@@ -72,15 +73,16 @@ public class GameFlowController : MonoBehaviour
         RaceConfig.UseAnimalStats = useAnimalStatsToggle == null || useAnimalStatsToggle.isOn;
         RaceConfig.UseBoostZones = useBoostZonesToggle == null || useBoostZonesToggle.isOn;
         RaceConfig.SaveLocalRecords = saveLocalRecordsToggle == null || saveLocalRecordsToggle.isOn;
+        RaceConfig.UseFallRecovery = useFallRecoveryToggle == null || useFallRecoveryToggle.isOn;
         // RaceConfig.SelectedAnimal / PredictedLane은 각 버튼 클릭 시 이미 저장돼 있음(여기서 다시 읽지 않음)
 
         ApplyLaneAnimals();
 
         // 예측한 레인이 있으면 포인트를 건다(#29). 잔고에서 즉시 차감하고,
         // 적중 시 EndMenuController가 배당률만큼 지급한다.
-        if (RaceConfig.PredictedLane > 0 && LocalRecordManager.GetPoints() >= RaceConfig.DefaultBetAmount)
+        if (RaceConfig.PredictedLane > 0 && LocalRecordManager.GetPoints() >= RaceConfig.SelectedBetAmount)
         {
-            RaceConfig.BetAmount = RaceConfig.DefaultBetAmount;
+            RaceConfig.BetAmount = RaceConfig.SelectedBetAmount;
             LocalRecordManager.AddPoints(-RaceConfig.BetAmount);
         }
         else

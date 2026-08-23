@@ -23,6 +23,9 @@ public class BettingController : MonoBehaviour
     // 현재 보유 포인트 표시(선택 사항)
     public TMP_Text pointsLabel;
 
+    // 판돈 선택 버튼(선택 사항). 인덱스 = RaceConfig.BetAmountOptions 순서
+    public Image[] betAmountImages;
+
     private void Start()
     {
         RefreshLaneInfo();
@@ -58,7 +61,38 @@ public class BettingController : MonoBehaviour
             }
         }
 
+        UpdateBetAmountHighlight();
         UpdateHighlight();
+    }
+
+    // 판돈 버튼 OnClick에 인덱스(0~2)와 함께 연결 — RaceConfig.BetAmountOptions 순서
+    public void SelectBetAmount(int optionIndex)
+    {
+        if (optionIndex < 0 || optionIndex >= RaceConfig.BetAmountOptions.Length) return;
+
+        RaceConfig.SelectedBetAmount = RaceConfig.BetAmountOptions[optionIndex];
+        UpdateBetAmountHighlight();
+        UpdatePointsLabel();
+    }
+
+    private void UpdateBetAmountHighlight()
+    {
+        if (betAmountImages == null) return;
+
+        int points = LocalRecordManager.GetPoints();
+
+        for (int i = 0; i < betAmountImages.Length && i < RaceConfig.BetAmountOptions.Length; i++)
+        {
+            if (betAmountImages[i] == null) continue;
+
+            bool isSelected = RaceConfig.SelectedBetAmount == RaceConfig.BetAmountOptions[i];
+            betAmountImages[i].color = isSelected ? selectedColor : normalColor;
+            betAmountImages[i].rectTransform.localScale = isSelected ? Vector3.one * selectedScale : Vector3.one;
+
+            // 잔고보다 큰 판돈은 고를 수 없다
+            Button button = betAmountImages[i].GetComponent<Button>();
+            if (button != null) button.interactable = points >= RaceConfig.BetAmountOptions[i];
+        }
     }
 
     private void UpdatePointsLabel()
@@ -66,7 +100,7 @@ public class BettingController : MonoBehaviour
         if (pointsLabel == null) return;
 
         pointsLabel.text = "보유 " + LocalRecordManager.GetPoints() + "P"
-            + (RaceConfig.PredictedLane > 0 ? "  /  베팅 " + RaceConfig.DefaultBetAmount + "P" : "");
+            + (RaceConfig.PredictedLane > 0 ? "   /   베팅 " + RaceConfig.SelectedBetAmount + "P" : "");
     }
 
     private void OnEnable()
