@@ -52,6 +52,18 @@ public class Horse_Move : MonoBehaviour
         fallRecoveryCheckTime = -1f;
     }
 
+    // 낙마해서 멈춰 있는 상태인가
+    public bool IsDown
+    {
+        get { return LiveOrDie == 1; }
+    }
+
+    // 아직 재기립 가능성이 남아 있는가. false이고 IsDown이면 이 말은 영원히 못 움직인다.
+    public bool CanStillRecover
+    {
+        get { return !hasRecovered && RaceConfig.UseFallRecovery && fallRecoveryChance > 0f; }
+    }
+
     // BoostZone 등 트랙 위 트리거에서 일시적인 속도 배율을 적용할 때 호출
     // multiplier > 1이면 부스트, < 1이면 감속(장애물)
     public void ApplySpeedMultiplier(float multiplier, float durationSeconds)
