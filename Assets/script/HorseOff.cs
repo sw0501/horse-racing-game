@@ -23,6 +23,21 @@ public class HorseOff : MonoBehaviour
     int cnt = 1;
     float firstFinishTime = -1f;
 
+    // 완주하지 못한 레인(영구 낙마)의 순위 칸을 비워두지 않고 기권 표시로 채운다.
+    // GameFlowController가 레이스를 강제 종료할 때 호출한다.
+    public void MarkUnfinishedAsRetired()
+    {
+        TMP_Text[] rankTexts = { textMeshPro1, textMeshPro2, textMeshPro3, textMeshPro4, textMeshPro5 };
+
+        for (int i = 0; i < rankTexts.Length && i < RaceConfig.HorseCount; i++)
+        {
+            if (rankTexts[i] != null && string.IsNullOrEmpty(rankTexts[i].text))
+            {
+                rankTexts[i].text = "-";
+            }
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {

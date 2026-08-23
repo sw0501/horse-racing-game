@@ -77,7 +77,17 @@ public class LiveRankingController : MonoBehaviour
         for (int rank = 0; rank < activeIndices.Count; rank++)
         {
             int lane = laneNumbers[activeIndices[rank]];
-            sb.Append(rank + 1).Append("위: ").Append(lane).Append("번");
+
+            // 레인마다 동물이 다르므로(#28) 번호만으로는 누가 달리는지 알 수 없다
+            sb.Append(rank + 1).Append("위: ").Append(lane).Append("번 ")
+              .Append(RaceConfig.GetAnimalName(RaceConfig.LaneAnimals[lane]));
+
+            Horse_Move horse = cachedHorses[activeIndices[rank]];
+            if (horse != null && horse.IsDown)
+            {
+                sb.Append(horse.CanStillRecover ? " (넘어짐)" : " (기권)");
+            }
+
             if (rank < activeIndices.Count - 1)
             {
                 sb.Append('\n');

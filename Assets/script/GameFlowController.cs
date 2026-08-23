@@ -92,14 +92,55 @@ public class GameFlowController : MonoBehaviour
 
         // 게임 화면 진입 — 순위 HUD 노출
         if (rankingPanel != null) rankingPanel.SetActive(true);
-        if (liveRanking != null) liveRanking.gameObject.SetActive(true);
+        if (liveRanking != null)
+        {
+            liveRanking.gameObject.SetActive(true);
+            // OnRaceFinished에서 컴포넌트를 꺼두므로, 씬 리로드 없이 다시 시작하는
+            // 경로가 생겨도 HUD가 멈춘 채 남지 않도록 여기서 되살린다
+            liveRanking.enabled = true;
+        }
 
+        raceInProgress = true;
         BeginRace();
+    }
+
+    public HorseOff finishLine;
+
+    private bool raceInProgress;
+
+    // 영구 낙마한 말은 결승선을 통과할 수 없어 HorseOff의 종료 조건이 영원히 성립하지 않는다.
+    // (낙마 구간 x=130 ~ 결승선 x=167 사이에서 멈추면 그대로 게임이 멈춰 있었다)
+    // 더 이상 아무도 전진할 수 없게 되면 여기서 레이스를 마무리한다.
+    private void Update()
+    {
+        if (!raceInProgress) return;
+
+        for (int i = 1; i <= RaceConfig.HorseCount; i++)
+        {
+            GameObject horse = GameObject.Find(HorseNamePrefix + i);
+            if (horse == null) continue; // 완주해서 비활성화된 말
+
+            Horse_Move move = horse.GetComponent<Horse_Move>();
+            if (move == null) continue;
+
+            // 달리고 있거나, 넘어졌어도 다시 일어날 가능성이 남아 있으면 계속 기다린다
+            if (!move.IsDown || move.CanStillRecover) return;
+        }
+
+        if (finishLine != null)
+        {
+            finishLine.MarkUnfinishedAsRetired();
+        }
+
+        OnRaceFinished();
     }
 
     // HorseOff에서 모든 참가 동물이 결승선을 통과하면 호출 — 게임 화면 → 종료 화면 전환
     public void OnRaceFinished()
     {
+        if (!raceInProgress) return;
+        raceInProgress = false;
+
         if (liveRanking != null)
         {
             liveRanking.enabled = false;

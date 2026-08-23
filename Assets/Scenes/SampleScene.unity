@@ -13925,6 +13925,7 @@ MonoBehaviour:
   useBoostZonesToggle: {fileID: 326355806}
   saveLocalRecordsToggle: {fileID: 154888773}
   weatherText: {fileID: 546388259}
+  finishLine: {fileID: 1829593452}
 --- !u!4 &577413739
 Transform:
   m_ObjectHideFlags: 0
