@@ -8,7 +8,6 @@ public class Horse_Move : MonoBehaviour
 {
     public int cnt = 0;
     public float HorseSpeed;
-    public AnimatorControllerParameter walk;
     int LiveOrDie;
     public bool flag;
 

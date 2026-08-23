@@ -33,9 +33,16 @@ public class HorseOff : MonoBehaviour
         {
             if (rankTexts[i] != null && string.IsNullOrEmpty(rankTexts[i].text))
             {
-                rankTexts[i].text = "-";
+                rankTexts[i].text = FormatRank("-", i + 1);
             }
         }
+    }
+
+    // 레인마다 동물이 다르므로(#28) 등수만으로는 누가 몇 등인지 알 수 없다.
+    // 패널이 좁아 동물 이름은 리치 텍스트로 작게 덧붙인다.
+    private string FormatRank(string placement, int lane)
+    {
+        return placement + " <size=55%>" + RaceConfig.GetAnimalName(RaceConfig.LaneAnimals[lane]) + "</size>";
     }
 
     // Start is called before the first frame update
@@ -70,24 +77,23 @@ public class HorseOff : MonoBehaviour
 
         if(collision.gameObject.tag == "1")
         {
-            textMeshPro1.text = cnt.ToString();
-            Debug.Log(collision.GetComponentInParent<Horse_Move>().cnt);
+            textMeshPro1.text = FormatRank(cnt.ToString(), 1);
         }
         else if (collision.gameObject.tag == "2")
         {
-            textMeshPro2.text = cnt.ToString();
+            textMeshPro2.text = FormatRank(cnt.ToString(), 2);
         }
         else if(collision.gameObject.tag == "3")
         {
-            textMeshPro3.text = cnt.ToString();
+            textMeshPro3.text = FormatRank(cnt.ToString(), 3);
         }
         else if (collision.gameObject.tag == "4")
         {
-            textMeshPro4.text = cnt.ToString();
+            textMeshPro4.text = FormatRank(cnt.ToString(), 4);
         }
         else if (collision.gameObject.tag == "5")
         {
-            textMeshPro5.text = cnt.ToString();
+            textMeshPro5.text = FormatRank(cnt.ToString(), 5);
         }
 
         int fanfareIndex = placement - 1;
